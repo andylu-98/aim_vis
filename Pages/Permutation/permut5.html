@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+
+var inputArray = [];
+
+function fact(n){
+    if (n==1) return 1;
+    return n*fact(n-1);
+}
+
+function permute(x){
+
+var txt="";
+for (var i = 0; i < x; i++)
+  inputArray.push(i+1);
+
+var result = inputArray.reduce(function permute(res, item, key, arr) {
+    return res.concat(arr.length > 1 && arr.slice(0, key).concat(arr.slice(key + 1)).reduce(permute, []).map(function(perm) { return [item].concat(perm); }) || item);
+}, []);
+
+var upb = result.length
+for (var i = 0; i < upb; i++)
+  txt += result.pop() + " ......("+i + ") <br/>"; 
+
+    document.getElementById("demo").innerHTML = "Permutation of "+x+" cities (" + fact(x)+"): <br/>" +txt;
+
+}
+</script>
+</head>
+
+<body>
+
+<h1>Exercise</h1>
+<p id="demo">Creating all permutations</p>
+<button type="button" onclick="permute(5)">Permutation of 5 cities</button>
+
+</body>
+</html>

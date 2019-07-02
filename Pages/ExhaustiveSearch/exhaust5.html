@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+
+var inputArray = [];
+var distanceMatrix = [];
+var data = 
+[	[	1.309016994	,	1.951056516	],	
+	[	0.190983006	,	1.587785252	],	
+	[	0.190983006	,	0.412214748	],	
+	[	1.309016994	,	0.048943484	],	
+	[	2	,	1	]	];
+
+function fact(n){
+    if (n==1) return 1;
+    return n*fact(n-1);
+}
+
+function EuclideanDistance(x1,y1,x2,y2){
+  return Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2) );
+}
+
+function dist(){
+  for (var i = 0; i < data.length; i++){
+    var arr = [];
+    for (var j = 0; j < data.length; j++){
+      arr.push( EuclideanDistance(data[i][0], data[i][1],data[j][0], data[j][1]) );
+    };
+    distanceMatrix.push(arr);
+  };
+}
+
+
+
+function permute(x){
+
+dist();
+
+var txt="";
+for (var i = 0; i < x; i++)
+  inputArray.push(i);
+
+var result = inputArray.reduce(function permute(res, item, key, arr) {
+    return res.concat(arr.length > 1 && arr.slice(0, key).concat(arr.slice(key + 1)).reduce(permute, []).map(function(perm) { return [item].concat(perm); }) || item);
+}, []);
+
+var upb = result.length
+var arr2
+for (var i = 0; i < upb; i++){
+  var tmpDist = 0.0;
+  arr2 = result.pop() 
+  var minDistance = 50;
+  for (var j = 1; j < x; j++)
+    tmpDist += parseFloat(distanceMatrix[arr2[j-1]][arr2[j]]);  tmpDist += parseFloat(distanceMatrix[arr2[x-1]][arr2[0]]);	
+  txt += arr2 + " ......("+i + ") -dist: "+ tmpDist +"- <br/>";
+  if (tmpDist<minDistance){
+    minDistance = tmpDist;
+    optimalTour = "" + arr2;
+  }
+  
+}
+
+document.getElementById("demo").innerHTML = "Optimal tours are 0,1,2,3,4/1,2,3,4,0/2,3,4,0,1/3,4,0,1,2/4,0,1,2,3<p></p><img width=400 src=\"http:\/\/www.cs.nott.ac.uk\/~pszeo\/teaching\/javaScript\/G52AIM\/circle5pointsSolution.jpg\"/>" + "<p></p>Permutation of "+x+" cities (" + fact(x)+" of them): <p></p>"+txt;
+
+}
+</script>
+</head>
+
+<body>
+
+<h1>Exhaustive Search Exercise</h1>
+<p id="demo">Given coordinates of 5 cities as follows, create all candidate solutions as permutations and detect the optimal tour<br/>
+<img width="400" src="http://www.cs.nott.ac.uk/~pszeo/teaching/javaScript/G52AIM/circle5points.jpg"/><br/><button type="button" onclick="permute(5)">Find the optimal tour</button>
+</p>
+</body>
+</html>
