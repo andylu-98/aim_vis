@@ -1,2 +1,2 @@
-# AIMVisualisation
-G52AIM Visualisation
+# AIMVisualization
+G52AIM Visualization
