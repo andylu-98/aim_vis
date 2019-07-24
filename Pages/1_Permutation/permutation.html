@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Permutation</title>
+	<script>
+	//calculate the factorial of n
+	function fact(n){
+		if (n==1) return 1;
+		return n*fact(n-1);
+	}
+
+	function permute(x){
+		var inputArray = [];
+		var txt="";
+
+		for (var i = 0; i < x; i++)
+		inputArray.push(i+1);
+
+		var result = inputArray.reduce(function permute(res, item, key, arr) {
+			return res.concat(arr.length > 1 && arr.slice(0, key).concat(arr.slice(key + 1)).reduce(permute, []).map(function(perm) { return [item].concat(perm); }) || item);
+		}, []);
+
+		var upb = result.length
+		for (var i = 0; i < upb; i++)
+		txt += result.pop() + " ......("+i + ") <br/>";
+
+		document.getElementById("demo").innerHTML = "Permutation of "+x+" cities (" + fact(x)+"): <br/>" +txt;
+	}
+
+	function main(){
+		var number = document.getElementById('cities').value;
+		permute(number);
+	}
+</script>
+</head>
+
+<body>
+
+	<h1>Exercise</h1>
+	<p>Creating all permutations for a number of cities</p>
+	<p>
+		Enter number of cities:
+		<input id="cities" type="text" value="5" size="3" maxlength="3">
+		<button onclick="main()">Enter</button>
+	</p>
+	<p>Warning: If the number you enter is larger than 9, your browser might stop responding for quite a while until the results are calculated.</p>
+	<p id="demo"></p>
+</body>
+</html>
