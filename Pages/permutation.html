@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Permutation </title>
+		<script type="text/javascript">
+
+			var numberOfCities;
+
+			//calculate the factorial of n
+			function fact(n){
+				if (n==1) return 1;
+				return n*fact(n-1);
+			}
+
+			//create the permutation of x cities;
+			function permute(x){
+				var inputArray = [];
+				var txt="";
+
+				for (var i = 0; i < x; i++)
+				inputArray.push(i+1);
+
+				var result = inputArray.reduce(function permute(res, item, key, arr) {
+					return res.concat(arr.length > 1 && arr.slice(0, key).concat(arr.slice(key + 1)).reduce(permute, []).map(function(perm) { return [item].concat(perm); }) || item);
+				}, []);
+
+				var upb = result.length
+				for (var i = 0; i < upb; i++)
+				txt += result.pop() + " ......("+i + ") <br/>";
+
+				document.getElementById("demo").innerHTML = "Permutation of "+x+" cities (" + fact(x)+"): <br/>" +txt;
+			}
+
+			//check the inputs on EnterNumberOfCities page and prompt message accordingly
+			//the number of cities should be an integer
+			function checkCity(){
+				var input = document.querySelector(".input input").value;
+				if (parseInt(input)!==parseFloat(input) || parseInt(input)!= input || parseFloat(input) != input) {
+					//either number is NaN, or number is not an integer number
+					document.querySelector('.warning').innerHTML="Please Enter an Integer Number!";
+					return 1;
+				}
+				numberOfCities = parseInt(input);
+				permute(numberOfCities);
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1>Permutation</h1>
+		<p>Create all permutation of a number of cities</p>
+		<p>Note: if the number you enter is larger than 7, your browser might stop responding until the computation is completed</p>
+		<p>Enter the number of cities:</p>
+		<p class="input">
+			<input type="text" value="5" size="5" maxlength="3">
+			<button type="button" onclick="checkCity()">Enter</button></p>
+		<p class = "warning"></p>
+		<div id="demo"></div>
+		</div>
+		</div>
+	</body>
+</html>

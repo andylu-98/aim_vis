@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Interface test</title>
+		<style src="../css/separate.css"></style>
+	</head>
+	<body>
+		<div id="div">
+			<div id="left"><h1>Simulated Annealing</h1><p>Description</p><p>Enter parameters:</p>
+				<p id="trail"><span>Number of Trials: </span><input type="text" value="30"><span class = "warning"></span></p>
+				<p id="iteration"><span>Number of Iterations: </span><input type="text" value="150000"><span class = "warning"></span></p>
+				<p id="iom"><span>Intensity of Mutation: </span><input type="text" value="1"><span class = "warning"></span></p>
+				<p id="cschedule"><span>Cooling Schedule: </span>
+					<input type="radio" name="cooling" value="Geometric">Geometric
+					<input type="radio" name="cooling" value="LundyMees" checked="checked">LundyMees
+				<span class = "warning"></span></p>
+				<p id="crate"><span>Cooling Rate: </span><input type="text" value="0.0001"><span class = "warning"></span></p>
+				<button type="button" onclick="checkParameters()" >Enter</button>
+			</div><div id="right"><canvas id="chart"></canvas></div>
+		</div>
+	</body>
+</html>
