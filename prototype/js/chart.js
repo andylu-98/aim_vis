@@ -1,10 +1,10 @@
-function generateChart(route, line){
+function generateChart(route, line, label){
 	var ctx = document.getElementById('chart').getContext('2d');
 	var scatterChart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			datasets: [{
-				label: 'Route',
+				label: label,
 				data:	route,
 				backgroundColor: '#D5E2EA',
 				borderColor: '#7FC0E8',
