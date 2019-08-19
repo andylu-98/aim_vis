@@ -1,97 +1,0 @@
-<!DOCTYPE html><html><head><script>var distanceMatrix = []; var data = [	[	20833.3333	,	17100.0	],	
-	[	20900.0	,	17066.6667	],	
-	[	21300.0	,	13016.6667	],	
-	[	21600.0	,	14150.0	],	
-	[	21600.0	,	14966.6667	],	
-	[	21600.0	,	16500.0	],	
-	[	22183.3333	,	13133.3333	],	
-	[	22583.3333	,	14300.0	],	
-	[	22683.3333	,	12716.6667	],	
-	[	23616.6667	,	15866.6667	],	
-	[	23700.0	,	15933.3333	],	
-	[	23883.3333	,	14533.3333	],	
-	[	24166.6667	,	13250.0	],	
-	[	25149.1667	,	12365.8333	],	
-	[	26133.3333	,	14500.0	],	
-	[	26150.0	,	10550.0	],	
-	[	26283.3333	,	12766.6667	],	
-	[	26433.3333	,	13433.3333	],	
-	[	26550.0	,	13850.0	],	
-	[	26733.3333	,	11683.3333	],	
-	[	27026.1111	,	13051.9444	],	
-	[	27096.1111	,	13415.8333	],	
-	[	27153.6111	,	13203.3333	],	
-	[	27166.6667	,	9833.3333	],	
-	[	27233.3333	,	10450.0	],	
-	[	27233.3333	,	11783.3333	],	
-	[	27266.6667	,	10383.3333	],	
-	[	27433.3333	,	12400.0	],	
-	[	27462.5	,	12992.2222	]	];
-function EuclideanDistance(x1,y1,x2,y2){
-  return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
-}
-function dist(){
-  for (var i = 0; i < data.length; i++){
-    var arr = [];
-    for (var j = 0; j < data.length; j++){
-      arr.push( EuclideanDistance(data[i][0], data[i][1],data[j][0], data[j][1]) );
-    };
-    distanceMatrix.push(arr);  };}
-function totalDistance(tour){  var tmpDist = 0;
-  for (var j = 1; j < data.length; j++)
-    tmpDist += parseInt(distanceMatrix[tour[j-1]][tour[j]]);
-  tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
-  return tmpDist;}
-// inclusive min,max
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-function getStringTour(tour){
-	var locTxt = "";
-	for (var i = 0; i < tour.length-1; i++)
-		locTxt += tour[i] + ",";
-	locTxt += tour[tour.length-1];
-	return locTxt;
-}
-function applySimulatedAnnealing(){
-dist();
-// parameter listvar allDetails = false; // make this value true if you want to display all details for the search, ensure that maxNumberOfIterations is not large AND  maxNumberOfRuns is 1var tmp;var txt="";var txt2="";var allTxt = "";var loc;var loc2;var coolingRate;var meanObj=0;// parameters to play withconst LundyMees = 0; const beta = 0.0001; // for LundyMees	const Geometric = 1;  const alpha = 0.9995;  // for Geometricconst stopping_temperature=0.00001;	var coolingSchedule = LundyMees;  // You can set this value to Geometric or LundyMeesvar scaleDistance = 0.5;var maxNumberOfIterations = 150000;
-var maxNumberOfRuns = 30;
-var maxNumberOfMoves= 1; // strength of exploration (perturbation) - intensity of mutation
-switch(coolingSchedule){	case Geometric:		coolingRate = alpha;		txt2 ="<br/>Cooling Schedule: Geometric<br/>" + "Cooling rate: " + coolingRate; 		break;	case LundyMees:		coolingRate = beta;		txt2 ="<br/>Cooling Schedule: LundyMees<br/>"+ "Cooling rate: " + coolingRate; 		break;				default:		document.getElementById("demo").innerHTML = "Unknown Cooling Schedule";		return;	}	
-for (var noOfRuns=0;noOfRuns<maxNumberOfRuns;noOfRuns++){
-	var currentSolution = [];
-	var currentSolutionDistance;
-	var bestSolution = [];
-	var bestSolutionDistance;	var prevSolution = [];	var prevSolutionDistance;	
-	var newSolutionDistance;	var selfT ;	var k = 0;
-	// create a random permutation 
-	for (var i = 0; i < data.length; i++)
-	  currentSolution.push(i);
-	for (var i = 0; i < data.length-1; i++){
-	  loc = getRndInteger(i+1, data.length-1); // random location (i,maxLength)
-	  tmp = currentSolution[i];
-	  currentSolution[i] = currentSolution[loc]; 	  currentSolution[loc] = tmp;
-	};
-	currentSolutionDistance = totalDistance(currentSolution);	prevSolution = currentSolution.slice();	prevSolutionDistance = currentSolutionDistance;	bestSolution = currentSolution.slice();	bestSolutionDistance = currentSolutionDistance;		selfT = scaleDistance*currentSolutionDistance ; // initial temperature setting	allTxt += "<br/>Run#" + noOfRuns + ": ";			    while( (selfT >= stopping_temperature) && (k++ < maxNumberOfIterations) ){						// perturbation		// Make a number of random exchanges forming a new solution from the current solution		for (var m = 0; m < maxNumberOfMoves; m++){ 			loc = getRndInteger(0, data.length-1); 			loc2 = getRndInteger(1, data.length-1); 			if (loc==loc2){ loc2 = loc2+1; if (loc2==data.length) loc2=0;}; 			tmp = currentSolution[loc];			currentSolution[loc] = currentSolution[loc2];			currentSolution[loc2] = tmp;			}				newSolutionDistance = totalDistance(currentSolution); 		// accept the improving move OR worsening move based on the Boltzman probability		if ( (newSolutionDistance < currentSolutionDistance) || (Math.random() < Math.exp( - (1.0*newSolutionDistance-1.0*currentSolutionDistance) / selfT  ) ) )  { 			if ((allDetails)&&(newSolutionDistance < currentSolutionDistance)) txt+= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A:" +getStringTour(currentSolution)+": "+newSolutionDistance+"<br/>";  			if ((allDetails)&&(newSolutionDistance >= currentSolutionDistance)) txt+=  "AW:" + getStringTour(currentSolution)+": "+newSolutionDistance+"<br/>";						currentSolutionDistance = newSolutionDistance;			prevSolutionDistance = currentSolutionDistance;			prevSolution = currentSolution.slice();									if (newSolutionDistance < bestSolutionDistance){ // remember best solution found so far				bestSolutionDistance = newSolutionDistance;				bestSolution = currentSolution.slice();			}		} else{ 			// reject the worsening move			currentSolution = prevSolution.slice();			currentSolutionDistance = prevSolutionDistance;			if (allDetails) txt+= "RW:" + getStringTour(currentSolution)+": "+newSolutionDistance+"<br/>";				}		switch(coolingSchedule){			case Geometric:				selfT *= coolingRate; 				break;			case LundyMees:				selfT *= 1.0/(1.0+coolingRate); 				break;						default:				document.getElementById("demo").innerHTML = "Unknown Cooling Schedule";				return;			}        	}	meanObj += bestSolutionDistance;
-	if (allDetails)
-		allTxt += "<br/>Best tour found by SA: " + getStringTour(bestSolution) +"<br/> Best tour length (travelling distance): "+ bestSolutionDistance  + "<br/>" + txt;	else		allTxt += bestSolutionDistance  +  "<br/>" + txt; // + (100*(numberOfAcceptedMoves/(k-1))).toFixed(2)
-
-}
-document.getElementById("demo").innerHTML = "Known optimal tour length (travelling distance) for Western Sahara TSP problem instance with 29 cities (WI29) is ~27603 <br/> <img width=\"400\" src=\"http:\/\/www.cs.nott.ac.uk\/~pszeo\/teaching\/javaScript\/G52AIM\/WI29optimal.jpg\"/><br/>Number of Runs\/Trials: "+ maxNumberOfRuns+"<br/>Number of iterations: " + maxNumberOfIterations +"<br/>Number of Swaps: " +maxNumberOfMoves + txt2+ "<p/>Mean Distance Over All Runs: " + (meanObj/maxNumberOfRuns).toFixed(2) + "<p/>"+  allTxt; // <p></p>Searched States (Configurations, Solutions):<br/>" + txt;
-}
-
-</script>
-</head>
-
-<body>
-
-<h1>Exercise - Simulated Annealing</h1>
-<button type="button" onclick="applySimulatedAnnealing()">Run the algorithm</button>
-<p id="demo">Apply Simulated Annealing, using a number of random swap neighbourhood moves for perturbation  for a number of iterations over a randomly created initial solution to the given <a href="http://www.math.uwaterloo.ca/tsp/world/countries.html">Western Sahara TSP problem instance</a> with 29 cities (Experiments are not repeatable). Any improving solution has a tab with a few spaces as a prefix. <br/>You can edit the JavaScript code in this HTML file for experimentation, e.g., you can change the cooling schedule and relevant parameters (coolingSchedule: Geometric/alpha or LunyMees/beta), number of runs/trials ('maxNumberOfRuns'), number of iterations (search for 'maxNumberOfIterations'), number of mutational moves/intensity of mutation (search for 'maxNumberOfMoves') to try out different values.
-<br/>
-<img width="400" src="http://www.cs.nott.ac.uk/~pszeo/teaching/javaScript/G52AIM/WI29.jpg"/>
-</p>
-
-</body>
-</html>
