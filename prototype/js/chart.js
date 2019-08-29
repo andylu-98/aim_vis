@@ -1,5 +1,5 @@
-function generateChart(route, line, label){
-	var ctx = document.getElementById('chart').getContext('2d');
+function generateChart(route, line, label, id){
+	var ctx = document.getElementById(id).getContext('2d');
 	var scatterChart = new Chart(ctx, {
 		type: 'line',
 		data: {
@@ -15,8 +15,7 @@ function generateChart(route, line, label){
 			options: {
 				scales: {
 					xAxes: [{
-						type: 'linear',
-						position: 'bottom'
+						type: 'linear'
 					}]
 				}
 			}

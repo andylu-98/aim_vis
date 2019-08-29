@@ -1,0 +1,20 @@
+body {
+	font-family: sans-serif;
+	text-align: center;
+}
+
+canvas {
+	display: inline;
+	text-align: center;
+	width: 45%;
+}
+
+p.left{
+	float: left;
+	width: 50%;
+}
+
+p.right{
+	float: right;
+	width: 50%;
+}

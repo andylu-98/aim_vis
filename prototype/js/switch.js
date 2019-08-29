@@ -61,7 +61,7 @@ function toDiv4(direct){
 		'<p>Cooling Rate: ' + coolingRate + '</p>' +
 		'<div id="demo"><button type="button" onclick="run()"> Run </button></div>' +
 		'</div><div id="right"><canvas id="chart"></canvas></div>';
-		generateChart(coordinatesOfCities, false, "city");
+		generateChart(coordinatesOfCities, false, "city", 'chart');
 	}
 	else{
 		var el = document.getElementById("left");
