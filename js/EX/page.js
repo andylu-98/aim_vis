@@ -12,5 +12,5 @@ var heuristicPage = new heuristic(
 );
 
 function apply(parameters){
-	return exhaustive(parameters);
+	return applyExhaustiveSearch(parameters);
 }

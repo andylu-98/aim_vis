@@ -1,66 +1,13 @@
-//Hyper Heuristics
-//default setting -start
-var numberOfCities = 29;
-var coordinatesOfCities = [
-	{ x: 20833.3333, y: 17100.0},
-	{ x: 20900.0, y: 17066.6667},
-	{ x: 21300.0, y: 13016.6667},
-	{ x: 21600.0, y: 14150.0},
-	{ x: 21600.0, y: 14966.6667},
-	{ x: 21600.0, y: 16500.0},
-	{ x: 22183.3333, y: 13133.3333},
-	{ x: 22583.3333, y: 14300.0},
-	{ x: 22683.3333, y: 12716.6667},
-	{ x: 23616.6667, y: 15866.6667},
-	{ x: 23700.0, y: 15933.3333},
-	{ x: 23883.3333, y: 14533.3333},
-	{ x: 24166.6667, y: 13250.0},
-	{ x: 25149.1667, y: 12365.8333},
-	{ x: 26133.3333, y: 14500.0},
-	{ x: 26150.0, y: 10550.0},
-	{ x: 26283.3333, y: 12766.6667},
-	{ x: 26433.3333, y: 13433.3333},
-	{ x: 26550.0, y: 13850.0},
-	{ x: 26733.3333, y: 11683.3333},
-	{ x: 27026.1111, y: 13051.9444},
-	{ x: 27096.1111, y: 13415.8333},
-	{ x: 27153.6111, y: 13203.3333},
-	{ x: 27166.6667, y: 9833.3333},
-	{ x: 27233.3333, y: 10450.0},
-	{ x: 27233.3333, y: 11783.3333},
-	{ x: 27266.6667, y: 10383.3333},
-	{ x: 27433.3333, y: 12400.0},
-	{ x: 27462.5, y: 12992.2222}
-];
-var maxTrials = 30;
-var maxIteration = 600000;
-var tourSize = 2;
-var intensityOfMutation = 1;	// apply mutation for how many times
-var depthOfSearch = 1;		// number of passes in hill climbing
-var initialScore = 10;
-var upperScore = 20;
-var lowerScore = 0;
-var acceptanceRate = 0.5;
-
-
 var distanceMatrix = [];
 var data = [];
 var heuristicNum = [1, 2]; // number of different heuristics 0: mutation, 1: hill climbing
-//parameters - end
-
-//classes - start
 function heuristicPair(h1, h2){
 	this.h1 = h1;
 	this.h2 = h2;
 }
-//classed - end
-
-//helper functions - start
-//calculate the euclidean distance between two cities
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
-//calculate the euclidean distance between all pairs of cities and store in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -70,7 +17,6 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
-//calculate the total distance in a given tour (in integer)
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -79,11 +25,9 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
-// inclusive min,max
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-//create random permutations
 function permutation(length){
 	var perm = [];
 	for (j = 0; j < length; j++) perm.push(j);
@@ -95,11 +39,7 @@ function permutation(length){
 	}
 	return perm;
 }
-//helper functions - end
-
-//low level heuristics - start
-// tournament selection - bool: true: minimisation; false: maximisation
-function tournamentSelection(dataArr, bool){
+function tournamentSelection(dataArr, bool, tourSize){
 	var bestIndex;
 	var bestValue;
 	//create a random permutation of the population
@@ -124,7 +64,6 @@ function tournamentSelection(dataArr, bool){
 	}
 	return bestIndex;
 }
-//random random
 function randomSwap(solution){
 	for(var i = 0; i < 2; i++){
 		var loc1 = getRndInteger(0, data.length-1);
@@ -135,14 +74,12 @@ function randomSwap(solution){
 		solution[loc2] = tmp;
 	}
 }
-//adjacent Swap
 function adjacentSwap(dataArr, index){
 	var swapIndex = (index+1) % dataArr.length;
 	var tmp = dataArr[index];
 	dataArr[index] = dataArr[swapIndex];
 	dataArr[swapIndex] = tmp;
 }
-//next descent hill climbing
 function ndhc(solution){
 	var bestEval = totalDistance(solution);
 	for(var i = 0; i < depthOfSearch; i++){
@@ -156,7 +93,6 @@ function ndhc(solution){
 		}
 	}
 }
-//steepest descent hill climbing
 function sdhc(solution){
 	var bestEval = totalDistance(solution);
 	var bestIndex = -1;
@@ -175,10 +111,8 @@ function sdhc(solution){
 		if(bestIndex != -1) adjacentSwap(solution, bestIndex);
 	}
 }
-//low level heuristics - end
-
-//apply hyper heuristics
 function applyHH(pValues){
+
 	distanceMatrix = [];
 	data = [];
 
@@ -189,9 +123,9 @@ function applyHH(pValues){
 	var tourSize = pValues[4];
 	var intensityOfMutation = pValues[5];	// apply mutation for how many times
 	var depthOfSearch = pValues[6];		// number of passes in hill climbing
-	var initialScore = pValues[7];
-	var upperScore = pValues[8];
-	var lowerScore = pValues[9];
+	var upperScore = pValues[7];
+	var lowerScore = pValues[8];
+	var initialScore = pValues[9];
 	var acceptanceRate = pValues[10];
 
 	//convert coordinatesOfCities into an array of array of numbers
@@ -203,15 +137,14 @@ function applyHH(pValues){
 	var currentSolutionProgress = [];
 	var bestSolutionProgress = [];
 	var allBestSolution = [];
+	var allBestDistance = Number.MAX_SAFE_INTEGER;
 
-	//parameter list - start
 	var tmp; 			//temporarily store a location in a solution
 	var loc; 		// a location in a solution
 	var noOfRuns;	//loop counter for trials
 	var iteration; //loop counter for generations
 	var i;				//a loop counter
 	var j;  			//another loop counter
-	//parameter list - end
 
 	for(noOfRuns = 0; noOfRuns < maxTrials; noOfRuns++){
 		var currentSolution;
@@ -240,11 +173,11 @@ function applyHH(pValues){
 		}
 
 		heuristicScore = [];
-		for(i = 0; i < heuristicPairs.length; i++) heuristicScore.push(10);
+		for(i = 0; i < heuristicPairs.length; i++) heuristicScore.push(initialScore);
 
 		for(iteration = 0; iteration < maxIteration; iteration++){
 
-			var heuristics = tournamentSelection(heuristicScore, false);
+			var heuristics = tournamentSelection(heuristicScore, false, tourSize);
 			switch (heuristicPairs[heuristics].h1) {
 				case 0:
 					randomSwap(currentSolution);
@@ -283,17 +216,24 @@ function applyHH(pValues){
 				bestSolutionProgress.push({x: iteration, y: bestSolutionDistance});
 			}
 		}
-
-		for(var i = 0; i < currentPopulation[bestIndex].length; i++){
-			allBestSolution.push({x: data[currentPopulation[bestIndex][i]][0], y: data[currentPopulation[bestIndex][i]][1]});
+		if(bestSolutionDistance < allBestDistance){
+			allBestDistance = bestSolutionDistance;
+			allBestSolution = bestSolution;
 		}
-		allBestSolution.push({x: data[currentPopulation[bestIndex][0]][0], y: data[currentPopulation[bestIndex][0]][1]});
-
-		var chartData = [];
-		chartData.push({name: "bestSolution", data: allBestSolution, chart: 0});
-		chartData.push({name: "populationAverage", data: populationAverages, chart: 1});
-		chartData.push({name: "populationBest", data: populationBests, chart: 1});
-
-
 	}
+
+	var bestSolutionOb = [];
+	for(var i = 0; i < allBestSolution.length; i++){
+		bestSolutionOb.push({x: data[allBestSolution[i]][0], y: data[allBestSolution[i]][1]});
+	}
+	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
+
+	allBestSolution = bestSolutionOb;
+
+	var chartData = [];
+	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
+	chartData.push({name: "currentSolutions", data: currentSolutionProgress, chart: 1});
+	chartData.push({name: "bestSolutions", data: bestSolutionProgress, chart: 1});
+
+	return chartData;
 }

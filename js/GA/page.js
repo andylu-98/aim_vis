@@ -45,7 +45,6 @@ var heuristicPage = new heuristic(
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);
-
-	function apply(parameters){
+function apply(parameters){
 		return applyGA(parameters);
 	}

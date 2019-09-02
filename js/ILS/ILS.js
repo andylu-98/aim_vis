@@ -1,53 +1,11 @@
 //Iterated Local Search
+var distanceMatrix;
+var data ;
 
-//defualt setting - start
-var numberOfCities = 29;
-var coordinatesOfCities = [
-	{ x: 20833.3333, y: 17100.0},
-	{ x: 20900.0, y: 17066.6667},
-	{ x: 21300.0, y: 13016.6667},
-	{ x: 21600.0, y: 14150.0},
-	{ x: 21600.0, y: 14966.6667},
-	{ x: 21600.0, y: 16500.0},
-	{ x: 22183.3333, y: 13133.3333},
-	{ x: 22583.3333, y: 14300.0},
-	{ x: 22683.3333, y: 12716.6667},
-	{ x: 23616.6667, y: 15866.6667},
-	{ x: 23700.0, y: 15933.3333},
-	{ x: 23883.3333, y: 14533.3333},
-	{ x: 24166.6667, y: 13250.0},
-	{ x: 25149.1667, y: 12365.8333},
-	{ x: 26133.3333, y: 14500.0},
-	{ x: 26150.0, y: 10550.0},
-	{ x: 26283.3333, y: 12766.6667},
-	{ x: 26433.3333, y: 13433.3333},
-	{ x: 26550.0, y: 13850.0},
-	{ x: 26733.3333, y: 11683.3333},
-	{ x: 27026.1111, y: 13051.9444},
-	{ x: 27096.1111, y: 13415.8333},
-	{ x: 27153.6111, y: 13203.3333},
-	{ x: 27166.6667, y: 9833.3333},
-	{ x: 27233.3333, y: 10450.0},
-	{ x: 27233.3333, y: 11783.3333},
-	{ x: 27266.6667, y: 10383.3333},
-	{ x: 27433.3333, y: 12400.0},
-	{ x: 27462.5, y: 12992.2222}
-];
-var maxTrials = 30;
-var maxIterations = 6000;
-var intensityOfMutation=1; // strength of exploration (perturbation) - intensity of mutation
-var depthOfSearch = 1; // strength of exploitation - depth of search
-//defualt setting - end
-
-//parameters
-var distanceMatrix = [];
-var data = [];
-
-//calculate the euclidean distance between two cities
+//helper functions
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
-//calculate the euclidean distance between all pairs of cities and store in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -57,7 +15,6 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
-//calculate the total distance in a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -65,26 +22,47 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
-// inclusive min,max
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-// apply iterated local search
-function applyILS(){
-	
+
+//apply
+function applyILS(pValues){
+
+	//reset distanceMatrix and data
+	distanceMatrix = [];
+	data = [];
+
+	//extract value from user input - pValues
+	var numberOfCities = pValues[0];
+	var coordinatesOfCities = pValues[1];
+	var maxTrials = pValues[2];
+	var maxIterations = pValues[3];
+	var intensityOfMutation = pValues[4];
+	var depthOfSearch = pValues[5];
+
+	//data for generating chart in the webpage, array of objects of format {x: , y:}
+	var allBestSolution = [];				//best solution found
+	var acceptedFitness = [];				//accepted solution's fitness for each iteration (first trial)
+	var bestSolutionsAllTrial = []; // best solutions' fitnesses in each trial
+
+	//convert from array of numbers to array of array of numbers
+	for(var i = 0; i < coordinatesOfCities.length/2; i++) data.push([coordinatesOfCities[2*i], coordinatesOfCities[2*i+1]]);
+
+	//calculate distance between all pair of cities and store in distanceMatrix
+	dist();
+
 	// parameter list
-	var tmp;
-	var loc;
-	var loc2;
+	var tmp; //temporarily store a location in a solution
+	var loc; // a location in a solution
+	var loc2;// another location in a solution
 	var meanObj=0;
 
 	for (var noOfRuns=0;noOfRuns<maxTrials;noOfRuns++){
 		var currentSolution = [];
 		var currentSolutionDistance;
-
 		var prevSolution = [];
 		var prevSolutionDistance;
-
 		var newSolutionDistance;
 
 		// create a random permutation(initialization)
@@ -98,7 +76,7 @@ function applyILS(){
 		}
 		currentSolutionDistance = totalDistance(currentSolution);
 
-		for (var k = 0; k < maxIterations; k++){
+		for (var iteration = 0; iteration < maxIterations; iteration++){
 			prevSolution = currentSolution.slice();
 			prevSolutionDistance = currentSolutionDistance;
 
@@ -169,18 +147,8 @@ function applyILS(){
 				currentSolutionDistance = prevSolutionDistance;
 				currentSolution = prevSolution.slice();
 			}
+			if(noOfRuns == 0) acceptedFitness.push({x: iteration, y: currentSolutionDistance});
 		}
 		meanObj += currentSolutionDistance;
 	}
 }
-//run
-function run(){
-	//convert coordinatesOfCities into an array of array of numbers
-	for(var i = 0; i < coordinatesOfCities.length; i++){
-		data.push([coordinatesOfCities[i].x, coordinatesOfCities[i].y]);
-	}
-	dist();
-	applyILS();
-}
-
-run();

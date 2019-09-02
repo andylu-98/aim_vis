@@ -1,16 +1,20 @@
 var heuristicPage = new heuristic(
-	"Genetic Algorithms",
-	"Genetic Algorithms",
-	"Genetic Algorithms is a type of evolutionary algorithms developed based on Darwin's theory of evolution.",
+	"Hyper-heuristics",
+	"Hyper-heuristics",
+	"Hyper-heuristics is a class of methodologies for cross-domain search.",
 	[
 		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
 		{name: "Number of Trials", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
 		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
-		{name: "Population Size", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
-		{name: "Tournament Size", type: "int", info: {min: 1, maxIndex: 4}},
-		{name: "offspring Size", type: "int", info: {min: 1, maxIndex: 4}},
-		{name: "Intensity of Mutation", type: "int", info: {min: 1, maxIndex: Number.MAX_SAFE_INTEGER}}
+		{name: "Tournament Size", type: "int", info: {min: 1, maxIndex: Number.MAX_SAFE_INTEGER}},
+		{name: "Intensity of Mutation", type: "int", info: {min: 1, maxIndex: Number.MAX_SAFE_INTEGER}},
+		{name: "Depth of Search", type: "int", info:{min: 1, maxIndex: Number.MAX_SAFE_INTEGER}},
+		{name: "RL Score Upperbound", type: "int", info:{min: Number.MIN_SAFE_INTEGER, max:  Number.MAX_SAFE_INTEGER}},
+		{name: "RL Score Lowerbound", type: "int", info:{min: Number.MIN_SAFE_INTEGER, maxIndex: }},
+		{name: "RL Initial Score", type: "int", info:{minIndex: , maxIndex: }},
+		{name: "Naive Acceptance Rate", type: "float", info: {min: 0, max: 1}},
+
 	],
 	[29,[
 		20833.3333,17100.0,
@@ -41,7 +45,7 @@ var heuristicPage = new heuristic(
 		27233.3333,11783.3333,
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
-		27462.5,12992.2222], 30, 600000, 6, 2, 2, 1],
+		27462.5,12992.2222], 30, 600000, 2, 1, 1, 20, 0, 10, 0.5],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);

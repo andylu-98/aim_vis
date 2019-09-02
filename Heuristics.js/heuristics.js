@@ -111,10 +111,11 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 			p.appendChild(field);
 		}
 		else if(pConstraints[i].type === "string"){
-			for(j = 0; j < pConstraints[i].values.length; j++){
+			for(j = 0; j < pConstraints[i].info.values.length; j++){
 				field = document.createElement("input");
 				field.setAttribute("type", "radio");
 				field.setAttribute("name", "param" + (i+1));
+				if(j == pConstraints[i].info.values.checked) field.setAttribute("checked", "checked");
 				p.appendChild(field);
 			}
 		}
@@ -157,6 +158,9 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 			if(i%2 == 0) p.setAttribute("class", "left");
 			if(i%2 == 1) p.setAttribute("class", "right");
 		}
+		else{
+			p.setAttribute("class", "single");
+		}
 		canvas = document.createElement("canvas");
 		canvas.setAttribute("id", chartName[i].name);
 		p.appendChild(canvas);
@@ -196,7 +200,7 @@ function validate(){
 
 				var parse = parseInt(value);
 				if(parse != value){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "Please Enter an Integer.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^Please Enter an Integer.";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -209,14 +213,14 @@ function validate(){
 				else max = info.max;
 
 				if(min === null || max === null) {
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "You need to correct previous parameters.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^You need to correct previous parameters.";
 					hPValues.push(null);
 					pass = false;
 					continue;
 				}
 
 				if(parse < min || parse > max){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "The number you entered is not in the right range.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^The number you entered is not in the right range.";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -232,7 +236,7 @@ function validate(){
 
 				var parse = parseFloat(value);
 				if(parse != value){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "Please Enter a Number.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^Please Enter a Number.";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -245,14 +249,14 @@ function validate(){
 				else max = info.max;
 
 				if(min === null || max === null) {
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "You need to correct previous parameters.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^You need to correct previous parameters.";
 					hPValues.push(null);
 					pass = false;
 					continue;
 				}
 
 				if(parse < min || parse > max){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "The number you entered is not in the right range.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^The number you entered is not in the right range.";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -269,7 +273,7 @@ function validate(){
 				else length = info.length;
 
 				if(length === null) {
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "You need to correct previous parameters.";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^You need to correct previous parameters.";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -283,14 +287,14 @@ function validate(){
 				value = value.filter( function(item){return item != " " && item != "";} );
 				//if there's NaN in the input or the total number of coordinates is not a even number
 				if( !value.every(function(item){return parseInt(item) ==item || parseFloat(item) == item;}) || value.length % 2 !== 0){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML="Invalid format!";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML="^Invalid format!";
 					hPValues[i] = null;
 					pass = false;
 					continue;
 				}
 
 				if(value.length / 2 !== length){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML="Please enter " + length + " cities!";
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML="^Please enter " + length + " cities!";
 					hPValues[i] = null;
 					pass = false;
 					continue;
@@ -316,7 +320,6 @@ function validate(){
 function runAlgorithm(){
 	for(var i = 0; i < hChartConfig.length; i++) hChartConfig[i].data.datasets = [];
 	hChartData = apply(hPValues);
-	console.log(hChartData);
 	for(var i = 0; i < hChartData.length; i++){
 		addData(hChartData[i].data, hChartData[i].name, hChartData[i].chart);
 	}

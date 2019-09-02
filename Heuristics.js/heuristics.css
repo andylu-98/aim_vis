@@ -18,3 +18,12 @@ p.right{
 	float: right;
 	width: 50%;
 }
+
+p.warning{
+	color: red;
+}
+
+p.single{
+	margin: auto;
+	width: 80%;
+}
