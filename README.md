@@ -117,12 +117,27 @@ examples of usage can be found in the pages folder in the repo
 ### Heuristic Examples
 > Exhaustive Search
 
+description: 
+
+	exhaustive search evaluates all possible solutions and choose the one with best fitness
+charts: 
+
+	1. best solution
+	2. solution distribution of all permutations generated
+
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
  | | | number of cities | int | 5 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
  | | | city coordinates | coordinates | D5 | {lengthIndex:  *number of cities* }
 
 > Random Mutation Hill Climbing
+
+description: 
+
+	the hill climbing that uses random mutation as neighborhood move
+charts: 
+
+	1. best solution
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
@@ -133,6 +148,15 @@ neighborhood operator | random swap | | | |
 move acceptance | static | move acceptance | string | 0 | {values: ["improving only", "improving and equal"], checked: 0 }
 
 > Iterated Local Search
+
+description: 
+
+	this algorithm is based on visiting a sequence of locally optimal solutions by perturbing the current local optimum and applying local search/hill climbing after starting from the modified solution
+
+charts: 
+
+	1. best solution
+	2. accepted solution fitness at each iteration
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
@@ -147,6 +171,15 @@ termination | static | number of iterations | int | 6000 | {minimum: 0; maximum:
  | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
 
 > Simulated Annealing
+
+description: 
+
+	A stochastic local search algorithm inspired by the physical process of annealing (Kirkpatrick et al. 1983)
+
+charts: 
+
+	1. best solution
+	2. accepted solution fitness and best solution fitness at each iteration
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
@@ -163,6 +196,15 @@ termination | static | number of iterations | int | 150000 | {minimum: 0; maximu
 
 > Genetic Algorithms
 
+description: 
+
+	A population based search method based on Darwin's Theory of Evolution
+
+charts: 
+
+	1. best solution
+	2. average solution fitness of the population at each iteration
+
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
 initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
@@ -177,6 +219,15 @@ termination | static | number of iterations | int | 150000 | {minimum: 0; maximu
 
 
 > Memetic Algorithms
+
+description: 
+
+	A heuristic based on combining the exploration ability of genetic algorithm and the exploitation ability of hill climbing
+
+charts: 
+
+	1. best solution
+	2. average solution fitness of the population at each iteration
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
@@ -195,6 +246,15 @@ termination | static | number of iterations | int | 150000 | {minimum: 0; maximu
 
 > Multi-meme Memetic Algorithms
 
+description: 
+
+	Memetic algorithm with self-adaptive memetic materials
+
+charts: 
+
+	1. best solution
+	2. average solution fitness of the population at each iteration
+
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
 initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
@@ -212,6 +272,15 @@ termination | static | number of iterations | int | 150000 | {minimum: 0; maximu
  | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
 
 > Hyper-Heuristics
+
+description: 
+
+	A cross-domain search method using reinforcement learning.
+
+charts: 
+
+	1. best solution
+	2. accepted solution fitness and best solution fitness at each iteration
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
