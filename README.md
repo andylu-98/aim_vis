@@ -46,6 +46,13 @@ for different types of parameters, info has different type of attributes
 		an array of float number is expected from the user input, the numbers can be separated by comma, return, space, or tab
 		* length/lengthIndex: int, the number of coordinates. note that this represent the number of coordinates and hence the actual number of input numbers will the twice the number specified here. if using length, this will be treated as the actual length value. if using lengthIndex, this will be treated as the an index of the pConstraints array, and the user input for parameter at this index will be used as the length
 
+the default value for different type of parameters
+	
+	1. int: an integer number satisfying all constraints
+	2. float: a real number satisfying all constraints
+	3. string: the index in the value array provided
+	4. coordinates: an array of real numbers, seperated by comma
+
 > chart
 
 ```javascript
@@ -127,8 +134,8 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
- | | | number of cities | int | 5 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | D5 | {lengthIndex:  *number of cities* }
+ | | | number of cities | int | 5 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | D5 | {lengthIndex:  0(*number of cities*) }
 
 > Random Mutation Hill Climbing
 
@@ -141,11 +148,11 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
-loop | | number of passes | int | 1 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+loop | | number of passes | int | 1 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
 neighborhood operator | random swap | | | |
-move acceptance | static | move acceptance | string | 0 | {values: ["improving only", "improving and equal"], checked: 0 }
+move acceptance | static | move acceptance | string | 0 | {value: ["improving only", "improving and equal"], checked: 0 }
 
 > Iterated Local Search
 
@@ -160,15 +167,15 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
-perturbation | random exchange | intensity of mutation | int | 1 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
-local search | SDHC | depth of search | int | 1 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
-local search acceptance | static | local search acceptance | string | 0 | {values: ["improving only", "improving and equal"], checked: 0 }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+perturbation | random exchange | intensity of mutation | int | 1 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+local search | SDHC | depth of search | int | 1 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+local search acceptance | static | local search acceptance | string | 0 | {value: ["improving only", "improving and equal"], checked: 0 }
 neighborhood operator | adjacent exchange | | | |
-move acceptance | static | move accpetance | string | 1 | {values: ["improving only", "improving and equal"], checked: 1 }
-termination | static | number of iterations | int | 6000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+move acceptance | static | move accpetance | string | 1 | {value: ["improving only", "improving and equal"], checked: 1 }
+termination | static | number of iterations | int | 6000 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
 
 > Simulated Annealing
 
@@ -183,16 +190,16 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
-initial temperature | calculate from initial fitness | scale distance | float | 0.5 | {minimum: 0, maximum: 1}
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+initial temperature | calculate from initial fitness | scale distance | float | 0.5 | {min: 0, max: 1, minInclusive: false, maxInclusive: false}
 perturbation | random exchange | | | |
-move acceptance | non-worsening or with boltzmann probability |
-cooling | cooling | cooling schedule | string | 0 | {values: ["LundyMees", "Geometric"], checked: 0 }
- | | | cooling rate | float | 0.0001 | {minimum: 0; maximum: 1}
-termination | static | number of iterations | int | 150000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | stopping temperature | float | 0.00001 | {minimum: 0; maximum: 1}
+move acceptance | non-worsening or with boltzmann probability | | | |
+cooling | cooling | cooling schedule | string | 0 | {value: ["LundyMees", "Geometric"], checked: 0 }
+ | | | cooling rate | float | 0.0001 | {min: 0; max: 1, minInclusive: false, maxInclusive: false}
+termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | stopping temperature | float | 0.00001 | {min: 0; max: MAX_SAFE_INTEGER, minInclusive: false, maxInclusive: false}
 
 > Genetic Algorithms
 
@@ -207,15 +214,15 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
- | | | population size | int | 6 | {minimum: 1, maximum: MAX_SAFE_INTEGER}
-selection | tournament selection | tour size | int | 2 | {minimum: 1, maximum: *population size*}
-crossover | order crossover | crossover probability | float | 0.9 | {minimum: 0; maximum: 1}
-mutation | random swap | mutation probability | float | 0.9 | {minimum: 0; maximum: 1}
-replacement | transgenerational with elitism | offspring size | int | 2 | {minimum: 1, maximum: *population size*}
-termination | static | number of iterations | int | 150000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+ | | | population size | int | 6 | {min: 1, max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+selection | tournament selection | tour size | int | 2 | {min: 1, maxIndex: 2(*population size*), minInclusive: true, maxInclusive: true}
+crossover | order crossover | crossover probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+mutation | random swap | mutation probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+replacement | transgenerational with elitism | offspring size | int | 2 | {min: 1, maxIndex: 2(*population size*), minInclusive: true, maxInclusive: false}
+termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
 
 
 > Memetic Algorithms
@@ -231,18 +238,18 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
- | | | population size | int | 6 | {minimum: 1, maximum: MAX_SAFE_INTEGER}
-selection | tournament selection | tour size | int | 2 | {minimum: 1, maximum: *population size*}
-crossover | order crossover | crossover probability | float | 0.9 | {minimum: 0; maximum: 1}
-mutation | random swap | mutation probability | float | 0.9 | {minimum: 0; maximum: 1}
-hill climbing | NDHC | depth of search | int | 1 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+ | | | population size | int | 6 | {min: 1, max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+selection | tournament selection | tour size | int | 2 | {min: 1, maxIndex: 2(*population size*), minInclusive: true, maxInclusive: true}
+crossover | order crossover | crossover probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+mutation | random swap | mutation probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+hill climbing | NDHC | depth of search | int | 1 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
 hc acceptance | static | hc move acceptance | string | 0 | {values: ["improving only", "improving and equal"], checked: 0 }
 hc neighborhood operator | adjacent swap | | | |
-replacement | transgenerational with elitism | offspring size | int | 2 | {minimum: 1, maximum: *population size*}
-termination | static | number of iterations | int | 150000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+replacement | transgenerational with elitism | offspring size | int | 2 | {min: 1, max: 2(*population size*), minInclusive: true, maxInclusive: true}
+termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
 
 > Multi-meme Memetic Algorithms
 
@@ -257,19 +264,19 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
- | | | population size | int | 6 | {minimum: 1, maximum: MAX_SAFE_INTEGER}
-selection | tournament selection | tour size | int | 2 | {minimum: 1, maximum: *population size*}
-crossover | order crossover | crossover probability | float | 0.9 | {minimum: 0; maximum: 1}
-mutation | random swap | mutation probability | float | 0.9 | {minimum: 0; maximum: 1}
-hill climbing | NDHC | depth of search | int | 1 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+ | | | population size | int | 6 | {min: 1, max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+selection | tournament selection | tour size | int | 2 | {min: 1, maxIndex: 2(*population size*), minInclusive: true, maxInclusive: true}
+crossover | order crossover | crossover probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+mutation | random swap | mutation probability | float | 0.9 | {min: 0; max: 1, minInclusive: true, maxInclusive: true}
+hill climbing | NDHC | depth of search | int | 1 | {min: 0; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
 hc acceptance | static | hc move acceptance | string | 0 | {values: ["improving only", "improving and equal"], checked: 0 }
 hc neighborhood operator | adjacent swap | | | |
-replacement | transgenerational with elitism | offspring size | int | 2 | {minimum: 1, maximum: *population size*}
-mutate meme | | innovation rate | float | 0.4 | {minimum: 0, maximum: 1}
-termination | static | number of iterations | int | 150000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+replacement | transgenerational with elitism | offspring size | int | 2 | {min: 1, max: 2(*population size*), minInclusive: true, maxInclusive: false}
+mutate meme | | innovation rate | float | 0.4 | {min: 0, max: 1, minInclusive: true, maxInclusive: true}
+termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
 
 > Hyper-Heuristics
 
@@ -284,12 +291,12 @@ charts:
 
 component | method | parameter | parameter type | parameter default | parameter info
 -|-|-|-|-|-
-initialization | random | number of cities | int | 29 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | city coordinates | coordinates | WI29 | {lengthIndex:  *number of cities* }
-learning | reinforcement learning | upper score | int | 20 | {minimum: 0, maximum : MAX_SAFE_INTEGER}
- | | | lower score | int | 0 | {minimum: 0, maximum: *upper score*}
- | | | initial score | int | 10 | {minimum: *lower score*, maximum: *upper score*}
-selection | tournamen selection | tour size | int | 2 | {minimum: 1, maximum: 2}
-move acceptance | naive acceptance | acceptance rate | float | 0.5 | {minimum: 0, maximum: 1}
-termination | static | number of iterations | int | 6000 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
- | | | number of trials | int | 30 | {minimum: 0; maximum: MAX_SAFE_INTEGER }
+initialization | random | number of cities | int | 29 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | city coordinates | coordinates | WI29 | {lengthIndex:  0(*number of cities*) }
+learning | reinforcement learning | upper score | int | 20 | {min: 0, max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | lower score | int | 0 | {min: 0, maxIndex: 2(*upper score*), minInclusive: true, maxInclusive: false}
+ | | | initial score | int | 10 | {minIndex: 3(*lower score*), maxIndex: 2(*upper score*), minInclusive: true, maxInclusive: true}
+selection | tournamen selection | tour size | int | 2 | {min: 1, max: 2, minInclusive: true, maxInclusive: true}
+move acceptance | naive acceptance | acceptance rate | float | 0.5 | {min: 0, max: 1, minInclusive: true, maxInclusive: true}
+termination | static | number of iterations | int | 6000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
