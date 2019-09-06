@@ -1,13 +1,20 @@
-var distanceMatrix = [];
-var data = [];
-var heuristicNum = [1, 2]; // number of different heuristics 0: mutation, 1: hill climbing
+//Hyper-heuristics
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
+
+//classes
+//heuristic pair
 function heuristicPair(h1, h2){
 	this.h1 = h1;
 	this.h2 = h2;
 }
+
+//helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
+//calculate the euclidean distance between all pairs of cities and store in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -17,6 +24,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
+//calculate the total distance in a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -25,9 +33,11 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
+//get a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+//create a random permutation of given length
 function permutation(length){
 	var perm = [];
 	for (j = 0; j < length; j++) perm.push(j);
@@ -39,6 +49,7 @@ function permutation(length){
 	}
 	return perm;
 }
+// tournament selection - bool: true: minimisation; false: maximisation
 function tournamentSelection(dataArr, bool, tourSize){
 	var bestIndex;
 	var bestValue;
@@ -64,6 +75,9 @@ function tournamentSelection(dataArr, bool, tourSize){
 	}
 	return bestIndex;
 }
+
+//low-level heuristics
+//apply random swap once on a given array
 function randomSwap(solution){
 	for(var i = 0; i < 2; i++){
 		var loc1 = getRndInteger(0, data.length-1);
@@ -74,15 +88,17 @@ function randomSwap(solution){
 		solution[loc2] = tmp;
 	}
 }
+//apply adjacent swap once on a given array
 function adjacentSwap(dataArr, index){
 	var swapIndex = (index+1) % dataArr.length;
 	var tmp = dataArr[index];
 	dataArr[index] = dataArr[swapIndex];
 	dataArr[swapIndex] = tmp;
 }
+//apply next descent hill climbing using given configuration
 function ndhc(solution){
 	var bestEval = totalDistance(solution);
-	for(var i = 0; i < depthOfSearch; i++){
+	for(var i = 0; i < 1; i++){
 		for(var j = 0; j < data.length; j++){
 			//swap
 			adjacentSwap(solution, j);
@@ -93,10 +109,11 @@ function ndhc(solution){
 		}
 	}
 }
+//apply steepest descent hill climbing using given configuration
 function sdhc(solution){
 	var bestEval = totalDistance(solution);
 	var bestIndex = -1;
-	for(var i = 0; i < depthOfSearch; i++){
+	for(var i = 0; i < 1; i++){
 		for(var j = 0; j < data.length; j++){
 			//swap
 			adjacentSwap(solution, j);
@@ -111,22 +128,23 @@ function sdhc(solution){
 		if(bestIndex != -1) adjacentSwap(solution, bestIndex);
 	}
 }
+
+//apply
 function applyHH(pValues){
 
 	distanceMatrix = [];
 	data = [];
+	var heuristicNum = [1, 2]; // number of different heuristics 0: mutation, 1: hill climbing
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var maxTrials = pValues[2];
-	var maxIteration = pValues[3];
-	var tourSize = pValues[4];
-	var intensityOfMutation = pValues[5];	// apply mutation for how many times
-	var depthOfSearch = pValues[6];		// number of passes in hill climbing
-	var upperScore = pValues[7];
-	var lowerScore = pValues[8];
-	var initialScore = pValues[9];
-	var acceptanceRate = pValues[10];
+	var upperScore = pValues[2];
+	var lowerScore = pValues[3];
+	var initialScore = pValues[4];
+	var tourSize = pValues[5]
+	var acceptanceRate = pValues[6];
+	var maxIteration = pValues[7];
+	var maxTrials = pValues[8];
 
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){
@@ -134,8 +152,8 @@ function applyHH(pValues){
 	}
 	dist();
 
-	var currentSolutionProgress = [];
-	var bestSolutionProgress = [];
+	var acceptedFitness = [];
+	var bestFitness = [];
 	var allBestSolution = [];
 	var allBestDistance = Number.MAX_SAFE_INTEGER;
 
@@ -212,8 +230,8 @@ function applyHH(pValues){
 
 			//record the search process of the first iteration
 			if(noOfRuns == 0){
-				currentSolutionProgress.push({x: iteration, y: currentSolutionDistance});
-				bestSolutionProgress.push({x: iteration, y: bestSolutionDistance});
+				acceptedFitness.push({x: iteration, y: currentSolutionDistance});
+				bestFitness.push({x: iteration, y: bestSolutionDistance});
 			}
 		}
 		if(bestSolutionDistance < allBestDistance){
@@ -232,8 +250,8 @@ function applyHH(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
-	chartData.push({name: "currentSolutions", data: currentSolutionProgress, chart: 1});
-	chartData.push({name: "bestSolutions", data: bestSolutionProgress, chart: 1});
+	chartData.push({name: "currentSolutions", data: acceptedFitness, chart: 1});
+	chartData.push({name: "bestSolutions", data: bestFitness, chart: 1});
 
 	return chartData;
 }

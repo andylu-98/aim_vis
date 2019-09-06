@@ -1,11 +1,13 @@
 //Random mutation hill climbing
-var distanceMatrix;
-var data;
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
 
 //helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2) ));
 }
+//calculate the Euclidean distance between all pairs of cities and store the result in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -15,6 +17,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
+//calculate the total didtance of a given tour
 function totalDistance(tour){
 	var tmpDist = 0.0;
 	for (var j = 1; j < data.length; j++)
@@ -22,12 +25,13 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
+//return a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
 //apply
-function applyRandomMutationHC(pValues) {
+function applyRMHC(pValues) {
 
 	//reset distanceMatrix and data
 	distanceMatrix = [];
@@ -81,8 +85,8 @@ function applyRandomMutationHC(pValues) {
 			newSolutionDistance = totalDistance(currentSolution);
 
 			var accept;
-			if(moveAcceptance == 0) accept = (newSolutionDistance < currentSolutionDistance); //improving only
-			else if(moveAcceptance == 1) accept = (newSolutionDistance <= currentSolutionDistance); //improving and equal move
+			if(moveAcceptance == "0") accept = (newSolutionDistance < currentSolutionDistance); //improving only
+			else if(moveAcceptance == "1") accept = (newSolutionDistance <= currentSolutionDistance); //improving and equal move
 
 			if (accept){ // improving move
 				currentSolutionDistance = newSolutionDistance;
@@ -100,7 +104,7 @@ function applyRandomMutationHC(pValues) {
 
 	//store all the data to a single array to easily return
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + bestDistance, data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + currentSolutionDistance, data: allBestSolution, chart: 0});
 
 	return chartData;
 

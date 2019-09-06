@@ -1,16 +1,16 @@
 var heuristicPage = new heuristic(
-	"Genetic Algorithms",
-	"Genetic Algorithms",
-	"Genetic Algorithms is a type of evolutionary algorithms developed based on Darwin's theory of evolution.",
+	"Iterated Local Search",
+	"Iterated Local Search",
+	"ILS is based on visiting a sequence of locally optimal solutions by perturbing the current local optimum and applying local search/hill climbing after starting from the modified solution",
 	[
-		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
+		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
-		{name: "Number of Trials", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
-		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
-		{name: "Population Size", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER}},
-		{name: "Tournament Size", type: "int", info: {min: 1, maxIndex: 4}},
-		{name: "offspring Size", type: "int", info: {min: 1, maxIndex: 4}},
-		{name: "Intensity of Mutation", type: "int", info: {min: 1, maxIndex: Number.MAX_SAFE_INTEGER}}
+		{name: "Intensity of Mutation", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
+		{name: "Depth of Search", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
+		{name: "Local Search Acceptance", type: "string", info: {value: ["improving only", "improving and equal"], checked: 0}},
+		{name: "Move Acceptance", type: "string", info: {value: ["improving only", "improving and equal"], checked: 1}},
+		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
+		{name: "Number of Trials", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}}
 	],
 	[29,[
 		20833.3333,17100.0,
@@ -41,11 +41,11 @@ var heuristicPage = new heuristic(
 		27233.3333,11783.3333,
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
-		27462.5,12992.2222], 30, 600000, 6, 2, 2, 1],
+		27462.5,12992.2222], 1, 1, 0, 1, 6000, 30],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);
 
 	function apply(parameters){
-		return applyGA(parameters);
+		return applyILS(parameters);
 	}

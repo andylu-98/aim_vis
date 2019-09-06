@@ -1,11 +1,13 @@
 //Iterated Local Search
-var distanceMatrix;
-var data ;
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
 
 //helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
+//calculate the Euclidean distance between all pairs of cities and store the result in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -15,6 +17,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
+//calculate the total distance of a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -22,6 +25,7 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
+//get a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
@@ -36,15 +40,17 @@ function applyILS(pValues){
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var maxTrials = pValues[2];
-	var maxIterations = pValues[3];
-	var intensityOfMutation = pValues[4];
-	var depthOfSearch = pValues[5];
+	var intensityOfMutation = pValues[2];
+	var depthOfSearch = pValues[3];
+	var localSearchAcceptance = pValues[4];
+	var moveAcceptance = pValues[5];
+	var maxIterations = pValues[6];
+	var maxTrials = pValues[7];
 
 	//data for generating chart in the webpage, array of objects of format {x: , y:}
 	var allBestSolution = [];				//best solution found
+	var allBestFitness = Number.MAX_SAFE_INTEGER;
 	var acceptedFitness = [];				//accepted solution's fitness for each iteration (first trial)
-	var bestSolutionsAllTrial = []; // best solutions' fitnesses in each trial
 
 	//convert from array of numbers to array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++) data.push([coordinatesOfCities[2*i], coordinatesOfCities[2*i+1]]);
@@ -57,6 +63,7 @@ function applyILS(pValues){
 	var loc; // a location in a solution
 	var loc2;// another location in a solution
 	var meanObj=0;
+	var accept; // true for accept, false for reject
 
 	for (var noOfRuns=0;noOfRuns<maxTrials;noOfRuns++){
 		var currentSolution = [];
@@ -64,6 +71,7 @@ function applyILS(pValues){
 		var prevSolution = [];
 		var prevSolutionDistance;
 		var newSolutionDistance;
+
 
 		// create a random permutation(initialization)
 		for (var i = 0; i < data.length; i++)
@@ -111,7 +119,10 @@ function applyILS(pValues){
 
 					newSolutionDistance = totalDistance(currentSolution);
 
-					if (newSolutionDistance < bestCost){ // improving move
+					if(localSearchAcceptance == "0") accept = (newSolutionDistance < bestCost);
+					else accept = (newSolutionDistance <= bestCost)
+
+					if (accept){
 						bestCost = newSolutionDistance;
 						bestIndex = i;
 						//break; // no need to continue due to "<" and break out of for loop
@@ -143,12 +154,35 @@ function applyILS(pValues){
 			}
 
 			// go back to the solution before perturbation if there is no improvement after perturbation and hill climbing
-			if (currentSolutionDistance>prevSolutionDistance){ // prevSolution is better
+
+			if(moveAcceptance == "0") accept = (currentSolutionDistance<prevSolutionDistance);
+			else accept = (currentSolutionDistance<=prevSolutionDistance);
+
+			if (!accept){ // prevSolution is better
 				currentSolutionDistance = prevSolutionDistance;
 				currentSolution = prevSolution.slice();
 			}
 			if(noOfRuns == 0) acceptedFitness.push({x: iteration, y: currentSolutionDistance});
 		}
 		meanObj += currentSolutionDistance;
+
+		if(currentSolutionDistance < allBestFitness) {
+			allBestFitness = currentSolutionDistance;
+			allBestSolution = currentSolution;
+		}
 	}
+
+	var bestSolutionOb = [];
+	for(var i = 0; i < allBestSolution.length; i++){
+		bestSolutionOb.push({x: data[allBestSolution[i]][0], y: data[allBestSolution[i]][1]});
+	}
+	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
+
+	allBestSolution = bestSolutionOb;
+
+	var chartData = [];
+	chartData.push({name: "bestSolution: " + allBestFitness, data: allBestSolution, chart: 0});
+	chartData.push({name: "Accepted Solution", data: acceptedFitness, chart: 1});
+
+	return chartData;
 }

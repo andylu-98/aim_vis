@@ -1,49 +1,8 @@
-//Simulated Annealing
+//simulated Annealing
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
 
-//defualt setting - start
-var numberOfCities = 29;
-var coordinatesOfCities = [
-	{ x: 20833.3333, y: 17100.0},
-	{ x: 20900.0, y: 17066.6667},
-	{ x: 21300.0, y: 13016.6667},
-	{ x: 21600.0, y: 14150.0},
-	{ x: 21600.0, y: 14966.6667},
-	{ x: 21600.0, y: 16500.0},
-	{ x: 22183.3333, y: 13133.3333},
-	{ x: 22583.3333, y: 14300.0},
-	{ x: 22683.3333, y: 12716.6667},
-	{ x: 23616.6667, y: 15866.6667},
-	{ x: 23700.0, y: 15933.3333},
-	{ x: 23883.3333, y: 14533.3333},
-	{ x: 24166.6667, y: 13250.0},
-	{ x: 25149.1667, y: 12365.8333},
-	{ x: 26133.3333, y: 14500.0},
-	{ x: 26150.0, y: 10550.0},
-	{ x: 26283.3333, y: 12766.6667},
-	{ x: 26433.3333, y: 13433.3333},
-	{ x: 26550.0, y: 13850.0},
-	{ x: 26733.3333, y: 11683.3333},
-	{ x: 27026.1111, y: 13051.9444},
-	{ x: 27096.1111, y: 13415.8333},
-	{ x: 27153.6111, y: 13203.3333},
-	{ x: 27166.6667, y: 9833.3333},
-	{ x: 27233.3333, y: 10450.0},
-	{ x: 27233.3333, y: 11783.3333},
-	{ x: 27266.6667, y: 10383.3333},
-	{ x: 27433.3333, y: 12400.0},
-	{ x: 27462.5, y: 12992.2222}
-];
-var maxTrials = 30;
-var maxIteration = 150000;
-var intensityOfMutation = 1;
-var coolingSchedule = "LundyMees";
-var coolingRate = 0.0001;
-//defualt setting - end
-
-//parameters
-var distanceMatrix = [];
-var data = [];
-
+//helper functions
 //calculate the euclidean distance between two cities
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
@@ -58,7 +17,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
-//calculate the total distance in a given tour (in integer)
+//calculate the total distance in a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -67,24 +26,42 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
-// inclusive min,max
+// get a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-//apply simulated annealing
-function applySimulatedAnnealing(){
+
+//apply
+function applySA(pValues){
+
+	distanceMatrix = [];
+	data = [];
+
+	var numberOfCities = pValues[0];
+	var coordinatesOfCities = pValues[1];
+	var scaleDistance = pValues[2];
+	var coolingSchedule = pValues[3];
+	var coolingRate = pValues[4];
+	var maxIteration = pValues[5];
+	var maxTrials = pValues[6];
+	var stoppingTemp = pValues[7];
+
+	//convert coordinatesOfCities into an array of array of numbers
+	for(var i = 0; i < coordinatesOfCities.length/2; i++){
+		data.push([coordinatesOfCities[2*i], coordinatesOfCities[2*i+1]]);
+	}
+	dist();
+
+	var acceptedFitness = [];
+	var bestFitness = [];
+	var allBestSolution = [];
+	var allBestDistance = Number.MAX_SAFE_INTEGER;
 
 	// parameter list
-	var allDetails = false; // make this value true if you want to display all details for the search, ensure that maxIteration is not large AND maxTrials is 1
 	var tmp; //temporarily store a location in a solution
 	var loc; // a location in a solution
 	var loc2; // another location in a solution
 	var meanObj = 0; //average objective value across all runs
-	var scaleDistance = 0.5; //used to calculate initial solution
-	var allBestSolution = [];
-	var allBestSolutionDistance = 1000000000;
-
-	const stopping_temperature=0.00001;
 
 	// run the algorithms for maxTrials number of times
 	for (var noOfRuns=0; noOfRuns < maxTrials; noOfRuns++){
@@ -121,17 +98,15 @@ function applySimulatedAnnealing(){
 
 		selfT = scaleDistance*currentSolutionDistance ; // initial temperature setting
 
-		while( (selfT >= stopping_temperature) && (k++ < maxIteration) ){ //termination criteria
+		while( (selfT >= stoppingTemp) && (k++ < maxIteration) ){ //termination criteria
 			// perturbation
-			// Make a number of random exchanges forming a new solution from the current solution
-			for (var m = 0; m < intensityOfMutation; m++){
-				loc = getRndInteger(0, data.length-1);
-				loc2 = getRndInteger(1, data.length-1);
-				if (loc==loc2){ loc2 = loc2+1; if (loc2==data.length) loc2=0;};
-				tmp = currentSolution[loc];
-				currentSolution[loc] = currentSolution[loc2];
-				currentSolution[loc2] = tmp;
-			}
+
+			loc = getRndInteger(0, data.length-1);
+			loc2 = getRndInteger(1, data.length-1);
+			if (loc==loc2){ loc2 = loc2+1; if (loc2==data.length) loc2=0;};
+			tmp = currentSolution[loc];
+			currentSolution[loc] = currentSolution[loc2];
+			currentSolution[loc2] = tmp;
 
 			newSolutionDistance = totalDistance(currentSolution);
 			// accept the improving move OR worsening move based on the Boltzman probability
@@ -149,26 +124,29 @@ function applySimulatedAnnealing(){
 				currentSolution = prevSolution.slice();
 				currentSolutionDistance = prevSolutionDistance;
 			}
+
 			switch(coolingSchedule){
-				case "Geometric":
+				case "1":
 				selfT *= coolingRate;
 				break;
-				case "LundyMees":
+				case "0":
 				selfT *= 1.0/(1.0+coolingRate);
 				break;
+			}
+
+			if(noOfRuns == 0) {
+				acceptedFitness.push({x: k, y: currentSolutionDistance});
+				bestFitness.push({x: k, y: bestSolutionDistance});
 			}
 
 		}
 		meanObj += bestSolutionDistance;
 
 		// update best solution in all runs
-		if(bestSolutionDistance < allBestSolutionDistance){
-			allBestSolutionDistance = bestSolutionDistance;
+		if(bestSolutionDistance < allBestDistance){
+			allBestDistance = bestSolutionDistance;
 			allBestSolution = bestSolution;
 		}
-
-		console.log(noOfRuns);
-		console.log(bestSolution + " " + bestSolutionDistance);
 
 	}
 
@@ -179,16 +157,12 @@ function applySimulatedAnnealing(){
 	}
 	bestTour.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
 
-	//generateChart(bestTour, true, "Best Distance: " + allBestSolutionDistance);
-}
-//run
-function run(){
-	//convert coordinatesOfCities into an array of array of numbers
-	for(var i = 0; i < coordinatesOfCities.length; i++){
-		data.push([coordinatesOfCities[i].x, coordinatesOfCities[i].y]);
-	}
-	dist();
-	applySimulatedAnnealing();
-}
+	allBestSolution = bestTour;
 
-run();
+	var chartData = [];
+	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
+	chartData.push({name: "accepted fitness", data: acceptedFitness, chart: 1});
+	chartData.push({name: "best fitness", data: bestFitness, chart: 1});
+
+	return chartData
+}

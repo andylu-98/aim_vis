@@ -1,61 +1,13 @@
-//Memetic algorithms
+//Memetic Algorithms
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
 
-//default setting -start
-var numberOfCities = 29;
-var coordinatesOfCities = [
-	{ x: 20833.3333, y: 17100.0},
-	{ x: 20900.0, y: 17066.6667},
-	{ x: 21300.0, y: 13016.6667},
-	{ x: 21600.0, y: 14150.0},
-	{ x: 21600.0, y: 14966.6667},
-	{ x: 21600.0, y: 16500.0},
-	{ x: 22183.3333, y: 13133.3333},
-	{ x: 22583.3333, y: 14300.0},
-	{ x: 22683.3333, y: 12716.6667},
-	{ x: 23616.6667, y: 15866.6667},
-	{ x: 23700.0, y: 15933.3333},
-	{ x: 23883.3333, y: 14533.3333},
-	{ x: 24166.6667, y: 13250.0},
-	{ x: 25149.1667, y: 12365.8333},
-	{ x: 26133.3333, y: 14500.0},
-	{ x: 26150.0, y: 10550.0},
-	{ x: 26283.3333, y: 12766.6667},
-	{ x: 26433.3333, y: 13433.3333},
-	{ x: 26550.0, y: 13850.0},
-	{ x: 26733.3333, y: 11683.3333},
-	{ x: 27026.1111, y: 13051.9444},
-	{ x: 27096.1111, y: 13415.8333},
-	{ x: 27153.6111, y: 13203.3333},
-	{ x: 27166.6667, y: 9833.3333},
-	{ x: 27233.3333, y: 10450.0},
-	{ x: 27233.3333, y: 11783.3333},
-	{ x: 27266.6667, y: 10383.3333},
-	{ x: 27433.3333, y: 12400.0},
-	{ x: 27462.5, y: 12992.2222}
-];
-var maxTrials = 30;
-var maxIteration = 600000;
-var populationSize = 6;
-var tourSize = 2;
-var generationGap = 1/3;
-var intensityOfMutation = 1;	// apply mutation for how many times
-var depthOfSearch = 1;		// number of passes in hill climbing
-//unused ---------------
-var crossoverProbability;
-var mutationProbability;
-//default setting -end
-
-//parameters - start
-var distanceMatrix = [];
-var data = [];
-//parameters - end
-
-//helper functions - start
-//calculate the euclidean distance between two cities
+//helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
-//calculate the euclidean distance between all pairs of cities and store in distanceMatrix
+//calculate the Euclidean distance between all pairs of cities and store the results in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -63,9 +15,9 @@ function dist(){
 			arr.push( EuclideanDistance(data[i][0], data[i][1],data[j][0], data[j][1]) );
 		};
 		distanceMatrix.push(arr);
-	};
+	}
 }
-//calculate the total distance in a given tour (in integer)
+//calculate the total distance of a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -74,11 +26,11 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
-// inclusive min,max
+//get a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-//return the index of the largest element in an array
+//get the index of the maximum value in an array
 function indexOfMax(arr) {
 
 	var max = arr[0];
@@ -93,7 +45,7 @@ function indexOfMax(arr) {
 
 	return maxIndex;
 }
-//create random permutations
+//create a random permutation of given length
 function permutation(length){
 	var perm = [];
 	for (j = 0; j < length; j++) perm.push(j);
@@ -105,11 +57,8 @@ function permutation(length){
 	}
 	return perm;
 }
-//helper functions - end
-
-//low level heuristics - start
-// tournament selection - bool: true: minimisation; false: maximisation
-function tournamentSelection(dataArr, bool){
+//tounament selection, bool: true: minimisation, max: maximisation
+function tournamentSelection(dataArr, bool, tourSize){
 	var bestIndex;
 	var bestValue;
 	//create a random permutation of the population
@@ -134,7 +83,9 @@ function tournamentSelection(dataArr, bool){
 	}
 	return bestIndex;
 }
-//order crossover
+
+//low-level heuristics
+//apply order crossover once on parent1 and parent2 and store the result in offspring
 function orderCrossover(parent1, parent2, offspring){
 	var length = parent1.length;
 	var offspring1 = [];
@@ -196,7 +147,7 @@ function orderCrossover(parent1, parent2, offspring){
 	offspring.push(offspring1);
 	offspring.push(offspring2);
 }
-//random swap
+//apply random swap once on a given array
 function randomSwap(dataArr){
 	for(var i = 0; i < 2; i++){
 		var loc1 = getRndInteger(0, dataArr.length-1);
@@ -207,15 +158,15 @@ function randomSwap(dataArr){
 		dataArr[loc2] = tmp;
 	}
 }
-//adjacent Swap
+//apply adjacent swap once on a given array 
 function adjacentSwap(dataArr, index){
 	var swapIndex = (index+1) % dataArr.length;
 	var tmp = dataArr[index];
 	dataArr[index] = dataArr[swapIndex];
 	dataArr[swapIndex] = tmp;
 }
-//next descent hill climbing
-function ndhc(solution){
+//apply next descent hill climbing using given configuration
+function ndhc(solution, depthOfSearch, moveAcceptence){
 	var bestEval = totalDistance(solution);
 	for(var i = 0; i < depthOfSearch; i++){
 		for(var j = 0; j < data.length; j++){
@@ -223,16 +174,46 @@ function ndhc(solution){
 			adjacentSwap(solution, j);
 			//evaluate
 			var currentEval = totalDistance(solution);
+
+			var accept;
+			if(moveAcceptence === "0") accept = (currentEval < bestEval);
+			else accept = (currentEval <= bestEval);
+
 			if(currentEval < bestEval) bestEval = currentEval;
 			else adjacentSwap(solution, j);
 		}
 	}
 }
-//low level heuristics - end
 
-//apply memetic algorithm
-function applyMA(){
-	//parameter list - start
+//applyHH
+function applyMA(pValues){
+
+	distanceMatrix = [];
+	data = [];
+
+	var numberOfCities = pValues[0];
+	var coordinatesOfCities = pValues[1];
+	var populationSize = pValues[2];
+	var tourSize = pValues[3];
+	var crossoverProbability = pValues[4];
+	var mutationProbability = pValues[5];
+	var depthOfSearch = pValues[6];
+	var moveAcceptence = pValues[7];
+	var offspringSize = pValues[8];
+	var maxTrials = pValues[9];
+	var maxIteration = pValues[10];
+
+
+	//convert coordinatesOfCities into an array of array of numbers
+	for(var i = 0; i < coordinatesOfCities.length/2; i++){
+		data.push([coordinatesOfCities[2*i], coordinatesOfCities[2*i+1]]);
+	}
+	dist();
+
+	var populationAverages = [];
+	var allBestSolution = [];
+	var allBestDistance = Number.MAX_SAFE_INTEGER;
+
 	var tmp; 			//temporarily store a location in a solution
 	var loc1; 		// a location in a solution
 	var loc2; 		// another location in a solution
@@ -240,9 +221,8 @@ function applyMA(){
 	var iteration; //loop counter for generations
 	var i;				//a loop counter
 	var j;  			//another loop counter
-	//parameter list - end
 
-	for (noOfRuns=0; noOfRuns < maxTrials; noOfRuns++){
+	for (noOfRuns = 0; noOfRuns < maxTrials; noOfRuns++){
 		var currentPopulation = [];
 		var currentPopulationDistance = [];
 		//initialisation - create random permutations (initialization)
@@ -255,25 +235,26 @@ function applyMA(){
 		for(iteration = 0; iteration < maxIteration; iteration++){
 			var parents = []; 		// parents in each generation, array of indexes
 			var offsprings = []; 	// offsprings in each generation, array of solutions
-			var offspringSize = populationSize * generationGap;
 			for(i = 0; i < Math.ceil((offspringSize+1)/2); i++){
 				parents = [];
 				//selection
-				parents.push(tournamentSelection(currentPopulationDistance, true));
-				parents.push(tournamentSelection(currentPopulationDistance, true));
-				while(parents[0] === parents[1]) parents[1] = tournamentSelection(currentPopulationDistance, true);
+				parents.push(tournamentSelection(currentPopulationDistance, true, tourSize));
+				parents.push(tournamentSelection(currentPopulationDistance, true, tourSize));
+				while(parents[0] === parents[1]) parents[1] = tournamentSelection(currentPopulationDistance, true,  tourSize);
 				//crossover - new offsprings are stored in the offsprings array
-				orderCrossover(currentPopulation[parents[0]], currentPopulation[parents[1]], offsprings);
+				if(Math.random() < crossoverProbability) orderCrossover(currentPopulation[parents[0]], currentPopulation[parents[1]], offsprings);
+				else {
+					offsprings.push(currentPopulation[parents[0]].slice());
+					offsprings.push(currentPopulation[parents[1]].slice());
+				}
 			}
 			offsprings = offsprings.splice(0, offspringSize);
 
 			//mutation - Make a random swap forming a new solution from the current solution
-			for(i = 0; i < intensityOfMutation; i++){
-				for(j = 0; j < offspringSize; j++) randomSwap(offsprings[j]);
-			}
+			for(j = 0; j < offspringSize; j++) if(Math.random() < mutationProbability) randomSwap(offsprings[j]);
 
 			//hill climbing - next descent with adjacent swap as neighborhood operator - single pass
-			for(i = 0; i < offspringSize; i++) ndhc(offsprings[i]);
+			for(i = 0; i < offspringSize; i++) ndhc(offsprings[i], depthOfSearch, moveAcceptence);
 
 			//replace - trans-generational with elitism
 			for(i = 0; i < offspringSize; i++){
@@ -292,18 +273,45 @@ function applyMA(){
 				currentPopulation = hold1.slice();
 				currentPopulationDistance = hold2.slice();
 			}
-		}
-		console.log(noOfRuns);for(var a = 0; a < populationSize; a++) console.log(currentPopulation[a] + " " + currentPopulationDistance[a]);
-	}
-}
-//run
-function run(){
-	//convert coordinatesOfCities into an array of array of numbers
-	for(var i = 0; i < coordinatesOfCities.length; i++){
-		data.push([coordinatesOfCities[i].x, coordinatesOfCities[i].y]);
-	}
-	dist();
-	applyMA();
-}
 
-run();
+			if(noOfRuns == 0){
+				//record process for the first iteration
+				var sum = 0;
+				for(i = 0; i < currentPopulationDistance.length; i++){
+					sum += currentPopulationDistance[i];
+				}
+				var average = sum/currentPopulation.length;
+
+				populationAverages.push({x: iteration, y: average});
+			}
+		}
+
+		var best = Number.MAX_SAFE_INTEGER;
+		var bestIndex = 0;
+		for(i = 0; i < currentPopulationDistance.length; i++){
+			if(currentPopulationDistance[i] < best) {
+				best = currentPopulationDistance[i];
+				bestIndex = i;
+			}
+		}
+
+		if(best < allBestDistance){
+			allBestSolution = currentPopulation[bestIndex];
+			allBestDistance = best;
+		}
+	}
+
+	var bestSolutionOb = [];
+	for(var i = 0; i < allBestSolution.length; i++){
+		bestSolutionOb.push({x: data[allBestSolution[i]][0], y: data[allBestSolution[i]][1]});
+	}
+	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
+
+	allBestSolution = bestSolutionOb;
+
+	var chartData = [];
+	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
+	chartData.push({name: "populationAverage", data: populationAverages, chart: 1});
+
+	return chartData;
+}

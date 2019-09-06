@@ -14,11 +14,6 @@ var color = ['#E83D3D', '#E8793D', '#E5E83D', '#A7E83D', '#54E83D', '#3DE8C4', '
 //parameters - end
 
 //classes constructor - start
-function dataSet(name, data, chart){
-	this.name = name;			//name of the dataset
-	this.data = data;			//array of coordinates {x, y}
-	this.chart = chart;		//id of chart to be displayed in
-}
 function heuristic(name, title, description, pConstraints, pDefaults, chartNum, chartName){
 	hName = name;
 	hTitle = title;
@@ -72,6 +67,8 @@ function heuristic(name, title, description, pConstraints, pDefaults, chartNum, 
 //classes constructor - end
 
 //functions - start
+
+//generate the page
 function generate(title, name, description, pConstraints, chartNum, chartName){
 	//parameter list - start
 	var input;
@@ -95,7 +92,7 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 	//add input fields
 	input = document.querySelector("div.input");
 	form = document.createElement("form");
-	//for each parameter create its input field in the form: <p class = "#param input">name: <input></p><p class = "#param warning">msg/p>
+	//for each parameter, create its input field in the form: <p class = "param# input">name: <input></p><p class = "param# warning">msg/p>
 	for(i = 0; i < pConstraints.length; i++){
 		p = document.createElement("p");
 		p.setAttribute("class", "param" + (i+1));
@@ -111,12 +108,15 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 			p.appendChild(field);
 		}
 		else if(pConstraints[i].type === "string"){
-			for(j = 0; j < pConstraints[i].info.values.length; j++){
+			for(j = 0; j < pConstraints[i].info.value.length; j++){
 				field = document.createElement("input");
 				field.setAttribute("type", "radio");
 				field.setAttribute("name", "param" + (i+1));
-				if(j == pConstraints[i].info.values.checked) field.setAttribute("checked", "checked");
+				field.setAttribute("value", j);
+				if(j == pConstraints[i].info.checked) field.checked = true;
+				text = document.createTextNode(pConstraints[i].info.value[j]);
 				p.appendChild(field);
+				p.appendChild(text);
 			}
 		}
 		warning = document.createElement("p");
@@ -180,9 +180,22 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 	document.querySelector("button.run").addEventListener("click", runAlgorithm);
 
 }
+
+//set all user input to default
 function setDefault(){
-	for(var i = 0; i < hPDefaults.length; i++) document.querySelector(".param" + (i+1) + ".input>input").setAttribute("value", hPDefaults[i]);
+	for(var i = 0; i < hPDefaults.length; i++) {
+		if(hPConstraints[i].type == 'string'){
+			document.querySelectorAll("[name=param" + (i+1) + "][type=radio]").checked = false;
+			document.querySelectorAll("[name=param" + (i+1) + "][type=radio]")[hPConstraints[i].info.checked].checked = true;
+		}
+		else{
+			document.querySelector(".param" + (i+1) + ".input>input").setAttribute("value", hPDefaults[i]);
+		}
+
+	}
 }
+
+//validate all user input and prompt error properly
 function validate(){
 	var pass = true;
 	hPValues = [];
@@ -193,10 +206,10 @@ function validate(){
 			var value = document.querySelector(".param" + (i+1) + ".input>input").value;
 			if(hPConstraints[i].type === "int"){
 				var info = hPConstraints[i].info;
-				if(info.min === undefined) if(info.minIndex === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.minIndex === undefined) if(info.min === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.max === undefined) if(info.maxIndex === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.maxIndex === undefined) if(info.max === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.min === undefined) if(info.minIndex === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.minIndex === undefined) if(info.min === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.max === undefined) if(info.maxIndex === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.maxIndex === undefined) if(info.max === undefined) {console.error("int parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
 
 				var parse = parseInt(value);
 				if(parse != value){
@@ -207,6 +220,8 @@ function validate(){
 				}
 				var min;
 				var max;
+				var minInclusive = info.minInclusive;
+				var maxInclusive = info.maxInclusive;
 				if(info.min === undefined) min = hPValues[info.minIndex];
 				else min = info.min;
 				if(info.max === undefined) max = hPValues[info.maxIndex];
@@ -219,8 +234,14 @@ function validate(){
 					continue;
 				}
 
-				if(parse < min || parse > max){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^The number you entered is not in the right range.";
+				var rightRange;
+				if(minInclusive && maxInclusive) rightRange = (parse >= min && parse <= max);
+				else if(!minInclusive && maxInclusive) rightRange = (parse > min && parse <= max);
+				else if(minInclusive && !maxInclusive) rightRange = (parse >= min && parse < max);
+				else if(!minInclusive && !maxInclusive) rightRange = (parse > min && parse < max);
+
+				if(!rightRange){
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^Please enter a number between " + min + " and " + max + ".";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -229,10 +250,10 @@ function validate(){
 			}
 			else if(hPConstraints[i].type === "float"){
 				var info = hPConstraints[i].info;
-				if(info.min === undefined) if(info.minIndex === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.minIndex === undefined) if(info.min === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.max === undefined) if(info.maxIndex === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
-				if(info.maxIndex === undefined) if(info.max === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.min === undefined) if(info.minIndex === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.minIndex === undefined) if(info.min === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.max === undefined) if(info.maxIndex === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
+				// if(info.maxIndex === undefined) if(info.max === undefined) {console.error("float parameter should have two info attributes indicating permitted minimum and maximum value"); return;}
 
 				var parse = parseFloat(value);
 				if(parse != value){
@@ -255,8 +276,14 @@ function validate(){
 					continue;
 				}
 
-				if(parse < min || parse > max){
-					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^The number you entered is not in the right range.";
+				var rightRange;
+				if(minInclusive && maxInclusive) rightRange = (parse >= min && parse <= max);
+				else if(!minInclusive && maxInclusive) rightRange = (parse > min && parse <= max);
+				else if(minInclusive && !maxInclusive) rightRange = (parse >= min && parse < max);
+				else if(!minInclusive && !maxInclusive) rightRange = (parse > min && parse < max);
+
+				if(!rightRange){
+					document.querySelector(".param" + (i+1) + ".warning").innerHTML = "^Please enter a number between " + min + " and " + max + ".";
 					hPValues.push(null);
 					pass = false;
 					continue;
@@ -265,8 +292,8 @@ function validate(){
 			}
 			else if(hPConstraints[i].type === "coordinates"){
 				var info = hPConstraints[i].info;
-				if(info.length === undefined) if(info.lengthIndex === undefined) {console.error("no length specified."); return;}
-				if(info.lengthIndex === undefined) if(info.length === undefined) {console.error("no length specified."); return;}
+				// if(info.length === undefined) if(info.lengthIndex === undefined) {console.error("no length specified."); return;}
+				// if(info.lengthIndex === undefined) if(info.length === undefined) {console.error("no length specified."); return;}
 
 				var length;
 				if(info.length === undefined) length = hPValues[info.lengthIndex];
@@ -310,13 +337,18 @@ function validate(){
 		for(var i = 0; i < hPValues.length; i++){
 			if(hPConstraints[i].type == "coordinates") continue;
 			txt += hPConstraints[i].name;
-			txt += ": " + hPValues[i] + "\t";
+			if(hPConstraints[i].type == "string") txt += ": " + hPConstraints[i].info.value[hPValues[i]] + "\t";
+			else txt += ": " + hPValues[i] + "\t";
+
+
 		}
 		document.querySelector("div.run p").innerHTML = txt;
 		document.querySelector("div.input").style.display = "none";
 		document.querySelector("div.run").style.display = "block";
 	}
 }
+
+//run algorithm and generate chart
 function runAlgorithm(){
 	for(var i = 0; i < hChartConfig.length; i++) hChartConfig[i].data.datasets = [];
 	hChartData = apply(hPValues);
@@ -325,6 +357,8 @@ function runAlgorithm(){
 	}
 	for(var i = 0; i < hCharts.length; i++) hCharts[i].update();
 }
+
+//add data to the chart
 function addData(data, label, id){
 	hChartConfig[id].data.datasets.push({
 		label: label,

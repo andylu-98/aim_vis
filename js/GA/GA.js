@@ -1,8 +1,13 @@
-var distanceMatrix = [];
-var data = [];
+//Genetic Algorithms
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
+
+//helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.round(Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ));
 }
+//calculate the Euclidean distance between all pairs of cities and store the results in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -12,6 +17,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	}
 }
+//calculate the total distance of a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
@@ -20,9 +26,11 @@ function totalDistance(tour){
 	tmpDist += parseInt(distanceMatrix[tour[data.length-1]][tour[0]]);
 	return tmpDist;
 }
+//get a random integer between min and max, both end inclusive
 function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+//get the index of the maximum value in an array
 function indexOfMax(arr) {
 
 	var max = arr[0];
@@ -37,6 +45,7 @@ function indexOfMax(arr) {
 
 	return maxIndex;
 }
+//create a random permutation of given length
 function permutation(length){
 	var perm = [];
 	for (j = 0; j < length; j++) perm.push(j);
@@ -48,6 +57,7 @@ function permutation(length){
 	}
 	return perm;
 }
+//tounament selection, bool: true: minimisation, max: maximisation
 function tournamentSelection(dataArr, bool, tourSize){
 	var bestIndex;
 	var bestValue;
@@ -73,6 +83,9 @@ function tournamentSelection(dataArr, bool, tourSize){
 	}
 	return bestIndex;
 }
+
+//low-level heuristics
+//apply order crossover once on parent1 and parent2 and store the result in offspring
 function orderCrossover(parent1, parent2, offspring){
 	var length = parent1.length;
 	var offspring1 = [];
@@ -134,6 +147,7 @@ function orderCrossover(parent1, parent2, offspring){
 	offspring.push(offspring1);
 	offspring.push(offspring2);
 }
+//apply random swap once on a given array 
 function randomSwap(dataArr){
 	for(var i = 0; i < 2; i++){
 		var loc1 = getRndInteger(0, dataArr.length-1);
@@ -144,19 +158,24 @@ function randomSwap(dataArr){
 		dataArr[loc2] = tmp;
 	}
 }
+
+//apply
 function applyGA(pValues){
 
+	//reset data and distanceMatrix everytime the fucntion is called
 	distanceMatrix = [];
 	data = [];
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var maxTrials = pValues[2];
-	var maxIteration = pValues[3];
-	var populationSize = pValues[4];
-	var tourSize = pValues[5];
+	var populationSize = pValues[2];
+	var tourSize = pValues[3];
+	var crossoverProbability = pValues[4];
+	var mutationProbability = pValues[5];
 	var offspringSize = pValues[6];
-	var intensityOfMutation = pValues[7];
+	var maxTrials = pValues[7];
+	var maxIteration = pValues[8];
+
 
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){
@@ -165,7 +184,6 @@ function applyGA(pValues){
 	dist();
 
 	var populationAverages = [];
-	var populationBests = [];
 	var allBestSolution = [];
 	var allBestDistance = Number.MAX_SAFE_INTEGER;
 
@@ -197,14 +215,16 @@ function applyGA(pValues){
 				parents.push(tournamentSelection(currentPopulationDistance, true, tourSize));
 				while(parents[0] === parents[1]) parents[1] = tournamentSelection(currentPopulationDistance, true,  tourSize);
 				//crossover - new offsprings are stored in the offsprings array
-				orderCrossover(currentPopulation[parents[0]], currentPopulation[parents[1]], offsprings);
+				if(Math.random() < crossoverProbability) orderCrossover(currentPopulation[parents[0]], currentPopulation[parents[1]], offsprings);
+				else {
+					offsprings.push(currentPopulation[parents[0]].slice());
+					offsprings.push(currentPopulation[parents[1]].slice());
+				}
 			}
 			offsprings = offsprings.splice(0, offspringSize);
 
 			//mutation - Make a random swap forming a new solution from the current solution
-			for(i = 0; i < intensityOfMutation; i++){
-				for(j = 0; j < offspringSize; j++) randomSwap(offsprings[j]);
-			}
+			for(j = 0; j < offspringSize; j++) if(Math.random() < mutationProbability) randomSwap(offsprings[j]);
 
 			//replace - trans-generational with elitism
 			for(i = 0; i < offspringSize; i++){
@@ -227,15 +247,12 @@ function applyGA(pValues){
 			if(noOfRuns == 0){
 				//record process for the first iteration
 				var sum = 0;
-				var best = Number.MAX_SAFE_INTEGER;
 				for(i = 0; i < currentPopulationDistance.length; i++){
-					if(currentPopulationDistance[i] < best) best = currentPopulationDistance[i];
 					sum += currentPopulationDistance[i];
 				}
 				var average = sum/currentPopulation.length;
 
 				populationAverages.push({x: iteration, y: average});
-				populationBests.push({x: iteration, y: best});
 			}
 		}
 
@@ -265,7 +282,6 @@ function applyGA(pValues){
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
 	chartData.push({name: "populationAverage", data: populationAverages, chart: 1});
-	chartData.push({name: "populationBest", data: populationBests, chart: 1});
 
 	return chartData;
 }

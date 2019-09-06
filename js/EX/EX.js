@@ -1,11 +1,13 @@
 //Exhaustive Search
-var distanceMatrix;
-var data;
+var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
+var data;							//array of array of numbers, represent the coordinates of cities
 
 //helper functions
+//calculate the Euclidean distance between two coordinates
 function EuclideanDistance(x1,y1,x2,y2){
 	return Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2) );
 }
+//calculate the Euclidean distance between all pairs of cities and store in distanceMatrix
 function dist(){
 	for (var i = 0; i < data.length; i++){
 		var arr = [];
@@ -15,6 +17,7 @@ function dist(){
 		distanceMatrix.push(arr);
 	};
 }
+//calculate the total diatance of a given tour
 function totalDistance(tour){
 	var tmpDist = 0;
 	for (var j = 1; j < data.length; j++)
