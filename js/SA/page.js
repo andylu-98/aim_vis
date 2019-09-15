@@ -5,6 +5,7 @@ var heuristicPage = new heuristic(
 	[
 		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
+		{name: "hr", type: "hr", info: {}},
 		{name: "Scale Distance", type: "float", info: {min: 0, max: 1, minInclusive: false, maxInclusive: false}},
 		{name: "Cooling Schedule", type: "string", info: {value: ["LundyMees", "Geometric"], checked: 0}},
 		{name: "Cooling Rate", type: "float", info: {min: 0, max: 1, minInclusive: false, maxInclusive: false}},
@@ -41,7 +42,7 @@ var heuristicPage = new heuristic(
 		27233.3333,11783.3333,
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
-		27462.5,12992.2222], 0.5, 0, 0.0001, 150000, 30, 0.00001],
+		27462.5,12992.2222], "", 0.5, 0, 0.0001, 150000, 30, 0.00001],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);

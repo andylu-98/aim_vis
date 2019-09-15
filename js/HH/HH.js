@@ -138,13 +138,13 @@ function applyHH(pValues){
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var upperScore = pValues[2];
-	var lowerScore = pValues[3];
-	var initialScore = pValues[4];
-	var tourSize = pValues[5]
-	var acceptanceRate = pValues[6];
-	var maxIteration = pValues[7];
-	var maxTrials = pValues[8];
+	var upperScore = pValues[3];
+	var lowerScore = pValues[4];
+	var initialScore = pValues[5];
+	var tourSize = pValues[6]
+	var acceptanceRate = pValues[7];
+	var maxIteration = pValues[8];
+	var maxTrials = pValues[9];
 
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){

@@ -40,12 +40,12 @@ function applyILS(pValues){
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var intensityOfMutation = pValues[2];
-	var depthOfSearch = pValues[3];
-	var localSearchAcceptance = pValues[4];
-	var moveAcceptance = pValues[5];
-	var maxIterations = pValues[6];
-	var maxTrials = pValues[7];
+	var intensityOfMutation = pValues[3];
+	var depthOfSearch = pValues[4];
+	var localSearchAcceptance = pValues[5];
+	var moveAcceptance = pValues[6];
+	var maxIterations = pValues[7];
+	var maxTrials = pValues[8];
 
 	//data for generating chart in the webpage, array of objects of format {x: , y:}
 	var allBestSolution = [];				//best solution found

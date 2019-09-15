@@ -45,13 +45,16 @@ for different types of parameters, info has different type of attributes
 	4. "coordinates"(html text input): {length/lengthIndex: }
 		an array of float number is expected from the user input, the numbers can be separated by comma, return, space, or tab
 		* length/lengthIndex: int, the number of coordinates. note that this represent the number of coordinates and hence the actual number of input numbers will the twice the number specified here. if using length, this will be treated as the actual length value. if using lengthIndex, this will be treated as the an index of the pConstraints array, and the user input for parameter at this index will be used as the length
+	5. "hr"(just a horizontal rule): {}
+		created for creating a horizontal rule between sections of parameters. You only need to specify the type of it to be "hr"
 
 the default value for different type of parameters
-	
+
 	1. int: an integer number satisfying all constraints
 	2. float: a real number satisfying all constraints
 	3. string: the index in the value array provided
-	4. coordinates: an array of real numbers, seperated by comma
+	4. coordinates: an array of real numbers, separated by comma
+	5. hr: an empty string,"" to take a space, because hr doesn't need a value.
 
 > chart
 
@@ -118,16 +121,18 @@ In order to create a page for an algorithm using Heuristics.js you need to provi
 
 		*note: chart.min.js & chart.min.css can be downloaded from https://chartjs.org*
 
+Please note that you need to keep the parameter settings and chart informations uniform in both your algorithm file and page.js in order for this framework to work correctly.
+
 examples of usage can be found in the pages folder in the repo
 
 ---
 ### Heuristic Examples
 > Exhaustive Search
 
-description: 
+description:
 
 	exhaustive search evaluates all possible solutions and choose the one with best fitness
-charts: 
+charts:
 
 	1. best solution
 	2. solution distribution of all permutations generated
@@ -139,10 +144,10 @@ component | method | parameter | parameter type | parameter default | parameter 
 
 > Random Mutation Hill Climbing
 
-description: 
+description:
 
 	the hill climbing that uses random mutation as neighborhood move
-charts: 
+charts:
 
 	1. best solution
 
@@ -156,11 +161,11 @@ move acceptance | static | move acceptance | string | 0 | {value: ["improving on
 
 > Iterated Local Search
 
-description: 
+description:
 
 	this algorithm is based on visiting a sequence of locally optimal solutions by perturbing the current local optimum and applying local search/hill climbing after starting from the modified solution
 
-charts: 
+charts:
 
 	1. best solution
 	2. accepted solution fitness at each iteration
@@ -179,11 +184,11 @@ termination | static | number of iterations | int | 6000 | {min: 1; max: MAX_SAF
 
 > Simulated Annealing
 
-description: 
+description:
 
 	A stochastic local search algorithm inspired by the physical process of annealing (Kirkpatrick et al. 1983)
 
-charts: 
+charts:
 
 	1. best solution
 	2. accepted solution fitness and best solution fitness at each iteration
@@ -203,11 +208,11 @@ termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_S
 
 > Genetic Algorithms
 
-description: 
+description:
 
 	A population based search method based on Darwin's Theory of Evolution
 
-charts: 
+charts:
 
 	1. best solution
 	2. average solution fitness of the population at each iteration
@@ -227,11 +232,11 @@ termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_S
 
 > Memetic Algorithms
 
-description: 
+description:
 
 	A heuristic based on combining the exploration ability of genetic algorithm and the exploitation ability of hill climbing
 
-charts: 
+charts:
 
 	1. best solution
 	2. average solution fitness of the population at each iteration
@@ -253,11 +258,11 @@ termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_S
 
 > Multi-meme Memetic Algorithms
 
-description: 
+description:
 
 	Memetic algorithm with self-adaptive memetic materials
 
-charts: 
+charts:
 
 	1. best solution
 	2. average solution fitness of the population at each iteration
@@ -280,11 +285,11 @@ termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_S
 
 > Hyper-Heuristics
 
-description: 
+description:
 
 	A cross-domain search method using reinforcement learning.
 
-charts: 
+charts:
 
 	1. best solution
 	2. accepted solution fitness and best solution fitness at each iteration

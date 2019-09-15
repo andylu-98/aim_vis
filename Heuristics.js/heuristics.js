@@ -94,37 +94,57 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 	form = document.createElement("form");
 	//for each parameter, create its input field in the form: <p class = "param# input">name: <input></p><p class = "param# warning">msg/p>
 	for(i = 0; i < pConstraints.length; i++){
-		p = document.createElement("p");
-		p.setAttribute("class", "param" + (i+1));
-		p.classList.add("input");
 
-		text = document.createTextNode(pConstraints[i].name + ": ");
-		p.appendChild(text);
+		if(pConstraints[i].type === "hr"){
+			p = document.createElement("p");
+			p.setAttribute("class", "param" + (i+1));
+			p.classList.add("input");
 
-		if(pConstraints[i].type === "int" || pConstraints[i].type === "float" ||pConstraints[i].type === "coordinates"){
-			field = document.createElement("input");
-			field.setAttribute("type", "text");
-			field.setAttribute("name", "param" + (i+1));
+			field = document.createElement("hr");
+			field.setAttribute("width", "30%");
+
+			warning = document.createElement("p");
+			warning.setAttribute("class", "param" + (i+1));
+			warning.classList.add("warning");
+
 			p.appendChild(field);
+			form.appendChild(p);
+			form.appendChild(warning);
+			continue;
 		}
-		else if(pConstraints[i].type === "string"){
-			for(j = 0; j < pConstraints[i].info.value.length; j++){
-				field = document.createElement("input");
-				field.setAttribute("type", "radio");
-				field.setAttribute("name", "param" + (i+1));
-				field.setAttribute("value", j);
-				if(j == pConstraints[i].info.checked) field.checked = true;
-				text = document.createTextNode(pConstraints[i].info.value[j]);
-				p.appendChild(field);
-				p.appendChild(text);
-			}
-		}
-		warning = document.createElement("p");
-		warning.setAttribute("class", "param" + (i+1));
-		warning.classList.add("warning");
+		else{
+			p = document.createElement("p");
+			p.setAttribute("class", "param" + (i+1));
+			p.classList.add("input");
 
-		form.appendChild(p);
-		form.appendChild(warning);
+			text = document.createTextNode(pConstraints[i].name + ": ");
+			p.appendChild(text);
+
+			if(pConstraints[i].type === "int" || pConstraints[i].type === "float" ||pConstraints[i].type === "coordinates"){
+				field = document.createElement("input");
+				field.setAttribute("type", "text");
+				field.setAttribute("name", "param" + (i+1));
+				p.appendChild(field);
+			}
+			else if(pConstraints[i].type === "string"){
+				for(j = 0; j < pConstraints[i].info.value.length; j++){
+					field = document.createElement("input");
+					field.setAttribute("type", "radio");
+					field.setAttribute("name", "param" + (i+1));
+					field.setAttribute("value", j);
+					if(j == pConstraints[i].info.checked) field.checked = true;
+					text = document.createTextNode(pConstraints[i].info.value[j]);
+					p.appendChild(field);
+					p.appendChild(text);
+				}
+			}
+			warning = document.createElement("p");
+			warning.setAttribute("class", "param" + (i+1));
+			warning.classList.add("warning");
+
+			form.appendChild(p);
+			form.appendChild(warning);
+		}
 	}
 
 	input.appendChild(form);
@@ -188,9 +208,8 @@ function setDefault(){
 			document.querySelectorAll("[name=param" + (i+1) + "][type=radio]").checked = false;
 			document.querySelectorAll("[name=param" + (i+1) + "][type=radio]")[hPConstraints[i].info.checked].checked = true;
 		}
-		else{
-			document.querySelector(".param" + (i+1) + ".input>input").setAttribute("value", hPDefaults[i]);
-		}
+		else if(hPConstraints[i].type == 'hr') continue;
+		else document.querySelector(".param" + (i+1) + ".input>input").setAttribute("value", hPDefaults[i]);
 
 	}
 }
@@ -202,6 +221,7 @@ function validate(){
 	for(var i = 0; i < hPConstraints.length; i++) document.querySelector(".param" + (i+1) + ".warning").innerHTML = "";
 	for(var i = 0; i < hPConstraints.length; i++){
 		if(hPConstraints[i].type === "string") hPValues.push(document.querySelector("[name=param" + (i+1) + "]:checked").value);
+		else if(hPConstraints[i].type === "hr") hPValues.push("");
 		else{
 			var value = document.querySelector(".param" + (i+1) + ".input>input").value;
 			if(hPConstraints[i].type === "int"){

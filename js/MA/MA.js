@@ -158,7 +158,7 @@ function randomSwap(dataArr){
 		dataArr[loc2] = tmp;
 	}
 }
-//apply adjacent swap once on a given array 
+//apply adjacent swap once on a given array
 function adjacentSwap(dataArr, index){
 	var swapIndex = (index+1) % dataArr.length;
 	var tmp = dataArr[index];
@@ -193,15 +193,15 @@ function applyMA(pValues){
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var populationSize = pValues[2];
-	var tourSize = pValues[3];
-	var crossoverProbability = pValues[4];
-	var mutationProbability = pValues[5];
-	var depthOfSearch = pValues[6];
-	var moveAcceptence = pValues[7];
-	var offspringSize = pValues[8];
-	var maxTrials = pValues[9];
-	var maxIteration = pValues[10];
+	var populationSize = pValues[3];
+	var tourSize = pValues[4];
+	var crossoverProbability = pValues[5];
+	var mutationProbability = pValues[6];
+	var depthOfSearch = pValues[7];
+	var moveAcceptence = pValues[8];
+	var offspringSize = pValues[9];
+	var maxTrials = pValues[10];
+	var maxIteration = pValues[11];
 
 
 	//convert coordinatesOfCities into an array of array of numbers

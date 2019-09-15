@@ -5,6 +5,7 @@ var heuristicPage = new heuristic(
 	[
 		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
+		{name: "hr", type: "hr", info: {}},
 		{name: "Number of Passes", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Move Acceptance", type: "string", info: {value: ["improving only", "improving and equal"], checked: 0}}
 	],
@@ -38,7 +39,7 @@ var heuristicPage = new heuristic(
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
 		27462.5,12992.2222
-	], 1, 0],
+	], "", 1, 0],
 		1,
 		[{name: "Solution", x: "x", y: "y"}]
 	);

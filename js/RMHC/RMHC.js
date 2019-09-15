@@ -40,8 +40,8 @@ function applyRMHC(pValues) {
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var numberOfPasses = pValues[2];
-	var moveAcceptance = pValues[3];
+	var numberOfPasses = pValues[3];
+	var moveAcceptance = pValues[4];
 
 	//data for generating chart in the webpage, array of objects of format {x: , y:}
 	var allBestSolution = [];			//best solution found

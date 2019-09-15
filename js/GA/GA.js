@@ -147,7 +147,7 @@ function orderCrossover(parent1, parent2, offspring){
 	offspring.push(offspring1);
 	offspring.push(offspring2);
 }
-//apply random swap once on a given array 
+//apply random swap once on a given array
 function randomSwap(dataArr){
 	for(var i = 0; i < 2; i++){
 		var loc1 = getRndInteger(0, dataArr.length-1);
@@ -168,13 +168,13 @@ function applyGA(pValues){
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var populationSize = pValues[2];
-	var tourSize = pValues[3];
-	var crossoverProbability = pValues[4];
-	var mutationProbability = pValues[5];
-	var offspringSize = pValues[6];
-	var maxTrials = pValues[7];
-	var maxIteration = pValues[8];
+	var populationSize = pValues[3];
+	var tourSize = pValues[4];
+	var crossoverProbability = pValues[5];
+	var mutationProbability = pValues[6];
+	var offspringSize = pValues[7];
+	var maxTrials = pValues[8];
+	var maxIteration = pValues[9];
 
 
 	//convert coordinatesOfCities into an array of array of numbers

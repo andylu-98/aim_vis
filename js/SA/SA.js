@@ -39,12 +39,12 @@ function applySA(pValues){
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var scaleDistance = pValues[2];
-	var coolingSchedule = pValues[3];
-	var coolingRate = pValues[4];
-	var maxIteration = pValues[5];
-	var maxTrials = pValues[6];
-	var stoppingTemp = pValues[7];
+	var scaleDistance = pValues[3];
+	var coolingSchedule = pValues[4];
+	var coolingRate = pValues[5];
+	var maxIteration = pValues[6];
+	var maxTrials = pValues[7];
+	var stoppingTemp = pValues[8];
 
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){

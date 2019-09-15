@@ -5,13 +5,14 @@ var heuristicPage = new heuristic(
 	[
 		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
+		{name: "hr", type: "hr", info: {}},
 		{name: "Population Size", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
-		{name: "Tournament Size", type: "int", info: {min: 1, maxIndex: 2, minInclusive: true, maxInclusive: true}},
+		{name: "Tournament Size", type: "int", info: {min: 1, maxIndex: 3, minInclusive: true, maxInclusive: true}},
 		{name: "Crossover Probability", type: "float", info: {min: 0, max: 1, minInclusive: true, maxInclusive: true}},
 		{name: "Mutation Probability", type: "float", info: {min: 0, max: 1, minInclusive: true, maxInclusive: true}},
 		{name: "Depth of Search", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}},
 		{name: "HC Move Acceptence", type: "string", info: {value: ["improving only", "improving and equal"], checked: 0}},
-		{name: "offspring Size", type: "int", info: {min: 1, maxIndex: 2, minInclusive: true, maxInclusive: true}},
+		{name: "offspring Size", type: "int", info: {min: 1, maxIndex: 3, minInclusive: true, maxInclusive: true}},
 		{name: "Inovation Rate", type: "float", info: {min: 0, max: 1, minInclusive: true, maxInclusive: true}},
 		{name: "Number of Trials", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}},
 		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}}
@@ -45,7 +46,7 @@ var heuristicPage = new heuristic(
 		27233.3333,11783.3333,
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
-		27462.5,12992.2222], 6, 2, 0.9, 0.9, 1, 0, 2, 0.4, 30, 150000],
+		27462.5,12992.2222], "", 6, 2, 0.9, 0.9, 1, 0, 2, 0.4, 30, 150000],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);

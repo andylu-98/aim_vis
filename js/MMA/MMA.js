@@ -224,16 +224,16 @@ function applyMMA(pValues){
 
 	var numberOfCities = pValues[0];
 	var coordinatesOfCities = pValues[1];
-	var populationSize = pValues[2];
-	var tourSize = pValues[3];
-	var crossoverProbability = pValues[4];
-	var mutationProbability = pValues[5];
-	var depthOfSearch = pValues[6];
-	var moveAcceptance = pValues[7];
-	var offspringSize = pValues[8];
-	var inovationRate = pValues[9]
-	var maxTrials = pValues[10];
-	var maxIteration = pValues[11];
+	var populationSize = pValues[3];
+	var tourSize = pValues[4];
+	var crossoverProbability = pValues[5];
+	var mutationProbability = pValues[6];
+	var depthOfSearch = pValues[7];
+	var moveAcceptance = pValues[8];
+	var offspringSize = pValues[9];
+	var inovationRate = pValues[10]
+	var maxTrials = pValues[11];
+	var maxIteration = pValues[12];
 
 
 	//convert coordinatesOfCities into an array of array of numbers

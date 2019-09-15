@@ -5,9 +5,10 @@ var heuristicPage = new heuristic(
 	[
 		{name: "Number Of Cities", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Coordinate of Cities", type: "coordinates", info: {lengthIndex: 0}},
+		{name: "hr", type: "hr", info: {}},
 		{name: "Upper Score", type: "int", info: {min: 0, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
-		{name: "Lower Score", type: "int", info: {min: 0, maxIndex: 2, minInclusive: true, maxInclusive: false}},
-		{name: "Initial Score", type: "int", info: {minIndex: 3, maxIndex: 2, minInclusive: true, maxInclusive: true}},
+		{name: "Lower Score", type: "int", info: {min: 0, maxIndex: 3, minInclusive: true, maxInclusive: false}},
+		{name: "Initial Score", type: "int", info: {minIndex: 4, maxIndex: 3, minInclusive: true, maxInclusive: true}},
 		{name: "Tournament Size", type: "int", info: {min: 1, max: 2, minInclusive: true, maxInclusive: true}},
 		{name: "Naive Acceptance Rate", type: "float", info: {min: 0, max: 1, minInclusive: true, maxInclusive: true}},
 		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}},
@@ -42,7 +43,7 @@ var heuristicPage = new heuristic(
 		27233.3333,11783.3333,
 		27266.6667,10383.3333,
 		27433.3333,12400.0,
-		27462.5,12992.2222], 20, 0, 10, 2, 0.5, 6000, 30],
+		27462.5,12992.2222], "", 20, 0, 10, 2, 0.5, 6000, 30],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);
