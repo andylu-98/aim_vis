@@ -174,13 +174,13 @@ function generate(title, name, description, pConstraints, chartNum, chartName){
 
 	for(i = 0; i < chartNum; i++){
 		p = document.createElement("p");
-		if(chartNum != 1){
-			if(i%2 == 0) p.setAttribute("class", "left");
-			if(i%2 == 1) p.setAttribute("class", "right");
-		}
-		else{
+		// if(chartNum != 1){
+		// 	if(i%2 == 0) p.setAttribute("class", "left");
+		// 	if(i%2 == 1) p.setAttribute("class", "right");
+		// }
+		// else{
 			p.setAttribute("class", "single");
-		}
+		// }
 		canvas = document.createElement("canvas");
 		canvas.setAttribute("id", chartName[i].name);
 		p.appendChild(canvas);
