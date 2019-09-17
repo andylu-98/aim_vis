@@ -78,8 +78,8 @@ function applyExhaustiveSearch(pValues){
 
 	//store all the data to a single array to easily return
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + bestDistance, data: allBestSolution, chart: 0});
-	chartData.push({name: "fitnesses", data: fitnessDistribution, chart: 1});
+	chartData.push({name: "bestSolution: " + bestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "fitnesses", type: "process", data: fitnessDistribution, chart: 1});
 
 	return chartData;
 

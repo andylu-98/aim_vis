@@ -104,7 +104,7 @@ function applyRMHC(pValues) {
 
 	//store all the data to a single array to easily return
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + currentSolutionDistance, data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + currentSolutionDistance, type: "route", data: allBestSolution, chart: 0});
 
 	return chartData;
 

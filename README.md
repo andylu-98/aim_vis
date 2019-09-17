@@ -80,6 +80,7 @@ the data returned from the algorithm to the framework need to be an array of thi
 ```javascript
 	{
 	name:,	//string, the label of this dataset that will be displayed in the chart, you can also include information such as average fitness or best fitness.
+	type:,	//string, permitted value: route, process. if value is route, the first two data point will be marked to indicate route direction
 	data:,	//an array of coordinate objects, the coordinates will be displayed in order in the chart
 	chart:	//int, the index in the chartInfo attribute of heuristic object representing the id of the chart that this dataset will be displayed in
 	}

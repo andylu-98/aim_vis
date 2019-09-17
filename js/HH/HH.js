@@ -249,9 +249,9 @@ function applyHH(pValues){
 	allBestSolution = bestSolutionOb;
 
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
-	chartData.push({name: "currentSolutions", data: acceptedFitness, chart: 1});
-	chartData.push({name: "bestSolutions", data: bestFitness, chart: 1});
+	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness, chart: 1});
+	chartData.push({name: "bestSolutions", type: "process", data: bestFitness, chart: 1});
 
 	return chartData;
 }

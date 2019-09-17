@@ -181,8 +181,8 @@ function applyILS(pValues){
 	allBestSolution = bestSolutionOb;
 
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestFitness, data: allBestSolution, chart: 0});
-	chartData.push({name: "Accepted Solution", data: acceptedFitness, chart: 1});
+	chartData.push({name: "bestSolution: " + allBestFitness, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "Accepted Solution", type: "process", data: acceptedFitness, chart: 1});
 
 	return chartData;
 }

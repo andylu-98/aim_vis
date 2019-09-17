@@ -160,9 +160,9 @@ function applySA(pValues){
 	allBestSolution = bestTour;
 
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestDistance, data: allBestSolution, chart: 0});
-	chartData.push({name: "accepted fitness", data: acceptedFitness, chart: 1});
-	chartData.push({name: "best fitness", data: bestFitness, chart: 1});
+	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "accepted fitness", type: "process", data: acceptedFitness, chart: 1});
+	chartData.push({name: "best fitness", type: "process", data: bestFitness, chart: 1});
 
 	return chartData
 }

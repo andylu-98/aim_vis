@@ -209,7 +209,7 @@ function setDefault(){
 			document.querySelectorAll("[name=param" + (i+1) + "][type=radio]")[hPConstraints[i].info.checked].checked = true;
 		}
 		else if(hPConstraints[i].type == 'hr') continue;
-		else document.querySelector(".param" + (i+1) + ".input>input").setAttribute("value", hPDefaults[i]);
+		else document.querySelector(".param" + (i+1) + ".input>input").value = hPDefaults[i];
 
 	}
 }
@@ -373,18 +373,28 @@ function runAlgorithm(){
 	for(var i = 0; i < hChartConfig.length; i++) hChartConfig[i].data.datasets = [];
 	hChartData = apply(hPValues);
 	for(var i = 0; i < hChartData.length; i++){
-		addData(hChartData[i].data, hChartData[i].name, hChartData[i].chart);
+		if(hChartData[i].type === "route") addData(hChartData[i].data, hChartData[i].name, hChartData[i].chart, true);
+		else addData(hChartData[i].data, hChartData[i].name, hChartData[i].chart, false);
 	}
 	for(var i = 0; i < hCharts.length; i++) hCharts[i].update();
 }
 
 //add data to the chart
-function addData(data, label, id){
+function addData(data, label, id, route){
+	var radius; //radius for each point
+	if(route) {
+		radius = [];
+		for(var i = 0; i < data.length; i++) radius.push(0);
+		radius[0] = 10;
+		radius[1] = 5;
+	}
+	else radius = 0;
 	hChartConfig[id].data.datasets.push({
 		label: label,
 		data:	data,
 		borderColor: color[Math.floor(Math.random() * Math.floor(color.length))],
-		lineTension: 0
+		lineTension: 0,
+		pointRadius: radius
 	});
 }
 //functions - end
