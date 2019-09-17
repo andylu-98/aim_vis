@@ -39,7 +39,7 @@ function applyILS(pValues){
 
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
 	var intensityOfMutation = pValues[3];
 	var depthOfSearch = pValues[4];
 	var localSearchAcceptance = pValues[5];
@@ -178,10 +178,9 @@ function applyILS(pValues){
 	}
 	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
 
-	allBestSolution = bestSolutionOb;
 
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestFitness, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + allBestFitness, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
 	chartData.push({name: "Accepted Solution", type: "process", data: acceptedFitness, chart: 1});
 
 	return chartData;

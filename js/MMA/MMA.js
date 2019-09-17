@@ -223,7 +223,7 @@ function applyMMA(pValues){
 	var memes = [1, 2]; // number of each heuristics [mutation, hill climbing]
 
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
 	var populationSize = pValues[3];
 	var tourSize = pValues[4];
 	var crossoverProbability = pValues[5];
@@ -380,10 +380,8 @@ function applyMMA(pValues){
 	}
 	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
 
-	allBestSolution = bestSolutionOb;
-
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
 	chartData.push({name: "populationAverage", type: "process", data: populationAverages, chart: 1});
 
 	return chartData;

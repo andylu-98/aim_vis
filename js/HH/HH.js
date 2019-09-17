@@ -137,7 +137,7 @@ function applyHH(pValues){
 	var heuristicNum = [1, 2]; // number of different heuristics 0: mutation, 1: hill climbing
 
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
 	var upperScore = pValues[3];
 	var lowerScore = pValues[4];
 	var initialScore = pValues[5];
@@ -246,10 +246,9 @@ function applyHH(pValues){
 	}
 	bestSolutionOb.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
 
-	allBestSolution = bestSolutionOb;
 
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
 	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness, chart: 1});
 	chartData.push({name: "bestSolutions", type: "process", data: bestFitness, chart: 1});
 

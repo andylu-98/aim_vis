@@ -39,7 +39,7 @@ function applyRMHC(pValues) {
 
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
 	var numberOfPasses = pValues[3];
 	var moveAcceptance = pValues[4];
 
@@ -104,7 +104,7 @@ function applyRMHC(pValues) {
 
 	//store all the data to a single array to easily return
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + currentSolutionDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + currentSolutionDistance, type: "route", data: allBestSolution, chart: 0, route: currentSolution});
 
 	return chartData;
 

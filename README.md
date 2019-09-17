@@ -30,20 +30,24 @@ Heuristics.js contains two files, heuristics.js & heuristics.css.
 for different types of parameters, info has different type of attributes
 
 	1. "int"(html text input): {min/minIndex: , max/maxIndex: , minInclusive: , maxInclusive: }
+		interpreted input type: an integer number
 		an integer number within given range will be expected from user
 		* min/minIndex: int, lower bound of parameter value. if using min, this will the treated as the actual lower bound value. if using minIndex, this will be treated as the an index of the pConstraints array, and the user input for parameter at this index will be used as the lower bound
 		* max/maxIndex: int, upper bound of parameter value. if using max, this will the treated as the actual upper bound value. if using maxIndex, this will be treated as the an index of the pConstraints array, and the user input for parameter at this index will be used as the upper bound
 		* minInclusive: boolean, true represents inclusive lower bound, false represents non-inclusive lower bound
 		* maxInclusive: boolean, true represents inclusive upper bound, false represents non-inclusive upper bound
 	2. "float"(html text input): {min/minIndex: , max/maxIndex: , minInclusive: , maxInclusive: }
+	  interpreted input type: a number
 		a float number within given range will be expected from user
 		* same as int except for that the type of min and max are treated as float.
 	3. "string"(html radio input): {value: , checked: }
+		interpreted input type: an integer number representing the index in 'value'
 		a option is expected to be selected from a number of radio buttons
 		* value: an array of strings, all permitted values of this parameter
 		* checked: int, the index of the value originally checked when the page is generated
 	4. "coordinates"(html text input): {length/lengthIndex: }
-		an array of float number is expected from the user input, the numbers can be separated by comma, return, space, or tab
+		interpreted input type: a tsp object
+		input of tsp format is expected, i.e. each line of input should in the format 'label x-coordinate y-coordinate', each line should be separated by a return.
 		* length/lengthIndex: int, the number of coordinates. note that this represent the number of coordinates and hence the actual number of input numbers will the twice the number specified here. if using length, this will be treated as the actual length value. if using lengthIndex, this will be treated as the an index of the pConstraints array, and the user input for parameter at this index will be used as the length
 	5. "hr"(just a horizontal rule): {}
 		created for creating a horizontal rule between sections of parameters. You only need to specify the type of it to be "hr"
@@ -80,9 +84,19 @@ the data returned from the algorithm to the framework need to be an array of thi
 ```javascript
 	{
 	name:,	//string, the label of this dataset that will be displayed in the chart, you can also include information such as average fitness or best fitness.
-	type:,	//string, permitted value: route, process. if value is route, the first two data point will be marked to indicate route direction
+	type:,	//string, permitted value: route, process. if value is route, the first two data point will be marked to indicate route direction, you should only have one dataset with type 'route', otherwise it would cause error.
 	data:,	//an array of coordinate objects, the coordinates will be displayed in order in the chart
-	chart:	//int, the index in the chartInfo attribute of heuristic object representing the id of the chart that this dataset will be displayed in
+	chart:,	//int, the index in the chartInfo attribute of heuristic object representing the id of the chart that this dataset will be displayed in
+	route:  //array of int, representing the index of cities in the input data array, this attribute is optional and only will be used when the type of dataset is route.
+	}
+```
+
+>tsp
+
+```javascript
+	{
+	label:, 	//an array of labels(possible type: string or int)
+	data: 		//an array of numbers
 	}
 ```
 

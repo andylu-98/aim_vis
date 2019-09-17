@@ -38,7 +38,7 @@ function applySA(pValues){
 	data = [];
 
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
 	var scaleDistance = pValues[3];
 	var coolingSchedule = pValues[4];
 	var coolingRate = pValues[5];
@@ -157,10 +157,8 @@ function applySA(pValues){
 	}
 	bestTour.push({x: data[allBestSolution[0]][0], y: data[allBestSolution[0]][1]});
 
-	allBestSolution = bestTour;
-
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestTour, chart: 0, route: allBestSolution});
 	chartData.push({name: "accepted fitness", type: "process", data: acceptedFitness, chart: 1});
 	chartData.push({name: "best fitness", type: "process", data: bestFitness, chart: 1});
 

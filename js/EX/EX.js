@@ -36,7 +36,9 @@ function applyExhaustiveSearch(pValues){
 
 	//extract value from user input - pValues
 	var numberOfCities = pValues[0];
-	var coordinatesOfCities = pValues[1];
+	var coordinatesOfCities = pValues[1].data;
+
+	console.log(coordinatesOfCities);
 
 	//data for generating chart in the webpage, array of objects of format {x: , y:}
 	var fitnessDistribution = [];	//fitness value for each permtation
@@ -78,7 +80,7 @@ function applyExhaustiveSearch(pValues){
 
 	//store all the data to a single array to easily return
 	var chartData = [];
-	chartData.push({name: "bestSolution: " + bestDistance, type: "route", data: allBestSolution, chart: 0});
+	chartData.push({name: "bestSolution: " + bestDistance, type: "route", data: allBestSolution, chart: 0, route: bestTour});
 	chartData.push({name: "fitnesses", type: "process", data: fitnessDistribution, chart: 1});
 
 	return chartData;
