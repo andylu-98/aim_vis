@@ -13,7 +13,8 @@ var heuristicPage = new heuristic(
 		{name: "Cooling Rate", type: "float", info: {min: 0, max: 1, minInclusive: false, maxInclusive: false}},
 		{name: "Number of Iterations", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
 		{name: "Number of Trials", type: "int", info: {min: 1, max: Number.MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}},
-		{name: "Stopping Temperature", type: "float", info: {min: 0, max: Number.MAX_SAFE_INTEGER, minInclusive: false, maxInclusive: false}}
+		{name: "Stopping Temperature", type: "float", info: {min: 0, max: Number.MAX_SAFE_INTEGER, minInclusive: false, maxInclusive: false}},
+		{name: "Number of Iterations Displayed", type: "int", info: {min: 1, maxIndex: 6, minInclusive: true, maxInclusive: true}}
 	],
 	[29,{
 		label: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
@@ -47,7 +48,7 @@ var heuristicPage = new heuristic(
 			27266.6667,10383.3333,
 			27433.3333,12400.0,
 			27462.5,12992.2222]
-	}, "", 0.5, 0, 0.0001, 150000, 30, 0.00001],
+	}, "", 0.5, 0, 0.0001, 150000, 30, 0.00001, 5000],
 		2,
 		[{name: "Solution", x: "x", y: "y"}, {name: "Process", x: "iteration", y: "fitness"}]
 	);

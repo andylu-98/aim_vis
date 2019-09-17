@@ -236,6 +236,7 @@ function applyMMA(pValues){
 	var inovationRate = pValues[10]
 	var maxTrials = pValues[11];
 	var maxIteration = pValues[12];
+	var iterationDisplayed = pValues[13];
 
 
 	//convert coordinatesOfCities into an array of array of numbers
@@ -384,7 +385,7 @@ function applyMMA(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "populationAverage", type: "process", data: populationAverages, chart: 1});
+	chartData.push({name: "populationAverage", type: "process", data: populationAverages.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData;
 }

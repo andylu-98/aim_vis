@@ -177,6 +177,7 @@ function applyGA(pValues){
 	var offspringSize = pValues[7];
 	var maxTrials = pValues[8];
 	var maxIteration = pValues[9];
+	var iterationDisplayed = pValues[10];
 
 
 	//convert coordinatesOfCities into an array of array of numbers
@@ -281,7 +282,7 @@ function applyGA(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "populationAverage", type: "process", data: populationAverages, chart: 1});
+	chartData.push({name: "populationAverage", type: "process", data: populationAverages.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData;
 }

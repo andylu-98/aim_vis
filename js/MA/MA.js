@@ -204,6 +204,7 @@ function applyMA(pValues){
 	var offspringSize = pValues[9];
 	var maxTrials = pValues[10];
 	var maxIteration = pValues[11];
+	var iterationDisplayed = pValues[12];
 
 
 	//convert coordinatesOfCities into an array of array of numbers
@@ -312,7 +313,7 @@ function applyMA(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "populationAverage", type: "process", data: populationAverages, chart: 1});
+	chartData.push({name: "populationAverage", type: "process", data: populationAverages.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData;
 }

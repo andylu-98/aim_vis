@@ -197,7 +197,8 @@ local search acceptance | static | local search acceptance | string | 0 | {value
 neighborhood operator | adjacent exchange | | | |
 move acceptance | static | move accpetance | string | 1 | {value: ["improving only", "improving and equal"], checked: 1 }
 termination | static | number of iterations | int | 6000 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
- | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+ | | | number of trials | int | 30 | {min: 1, max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
+other | | | number Iterations Displayed | int | 2000 | {min: 1, maxIndex: 7, minInclusive: true, maxInclusive: true}
 
 > Simulated Annealing
 
@@ -222,6 +223,7 @@ cooling | cooling | cooling schedule | string | 0 | {value: ["LundyMees", "Geome
 termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
  | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER, minInclusive: true, maxInclusive: false}
  | | | stopping temperature | float | 0.00001 | {min: 0; max: MAX_SAFE_INTEGER, minInclusive: false, maxInclusive: false}
+ other | | | number Iterations Displayed | int | 5000 | {min: 1, maxIndex: 6, minInclusive: true, maxInclusive: true}
 
 > Genetic Algorithms
 
@@ -245,6 +247,7 @@ mutation | random swap | mutation probability | float | 0.9 | {min: 0; max: 1, m
 replacement | transgenerational with elitism | offspring size | int | 2 | {min: 1, maxIndex: 2(*population size*), minInclusive: true, maxInclusive: false}
 termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
  | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ other | | | number Iterations Displayed | int | 5000 | {min: 1, maxIndex: 9, minInclusive: true, maxInclusive: true}
 
 
 > Memetic Algorithms
@@ -272,6 +275,7 @@ hc neighborhood operator | adjacent swap | | | |
 replacement | transgenerational with elitism | offspring size | int | 2 | {min: 1, max: 2(*population size*), minInclusive: true, maxInclusive: true}
 termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
  | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ other | | | number Iterations Displayed | int | 5000 | {min: 1, maxIndex: 11, minInclusive: true, maxInclusive: true}
 
 > Multi-meme Memetic Algorithms
 
@@ -299,6 +303,7 @@ replacement | transgenerational with elitism | offspring size | int | 2 | {min: 
 mutate meme | | innovation rate | float | 0.4 | {min: 0, max: 1, minInclusive: true, maxInclusive: true}
 termination | static | number of iterations | int | 150000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
  | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+ other | | | number Iterations Displayed | int | 5000 | {min: 1, maxIndex: 12, minInclusive: true, maxInclusive: true}
 
 > Hyper-Heuristics
 
@@ -322,3 +327,4 @@ selection | tournamen selection | tour size | int | 2 | {min: 1, max: 2, minIncl
 move acceptance | naive acceptance | acceptance rate | float | 0.5 | {min: 0, max: 1, minInclusive: true, maxInclusive: true}
 termination | static | number of iterations | int | 6000 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
  | | | number of trials | int | 30 | {min: 1; max: MAX_SAFE_INTEGER , minInclusive: true, maxInclusive: false}
+other | | | number Iterations Displayed | int | 5000 | {min: 1, maxIndex: 8, minInclusive: true, maxInclusive: true}

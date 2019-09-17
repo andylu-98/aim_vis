@@ -47,6 +47,7 @@ function applySA(pValues){
 	var maxIteration = pValues[6];
 	var maxTrials = pValues[7];
 	var stoppingTemp = pValues[8];
+	var iterationDisplayed = pValues[9];
 
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){
@@ -161,8 +162,8 @@ function applySA(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestTour, chart: 0, route: allBestSolution});
-	chartData.push({name: "accepted fitness", type: "process", data: acceptedFitness, chart: 1});
-	chartData.push({name: "best fitness", type: "process", data: bestFitness, chart: 1});
+	chartData.push({name: "accepted fitness", type: "process", data: acceptedFitness.slice(0, iterationDisplayed), chart: 1});
+	chartData.push({name: "best fitness", type: "process", data: bestFitness.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData
 }

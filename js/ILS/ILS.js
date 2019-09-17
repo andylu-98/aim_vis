@@ -48,6 +48,7 @@ function applyILS(pValues){
 	var moveAcceptance = pValues[6];
 	var maxIterations = pValues[7];
 	var maxTrials = pValues[8];
+	var iterationDisplayed = pValues[9];
 
 	//data for generating chart in the webpage, array of objects of format {x: , y:}
 	var allBestSolution = [];				//best solution found
@@ -183,7 +184,7 @@ function applyILS(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestFitness, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "Accepted Solution", type: "process", data: acceptedFitness, chart: 1});
+	chartData.push({name: "Accepted Solution", type: "process", data: acceptedFitness.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData;
 }

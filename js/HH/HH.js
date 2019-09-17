@@ -147,7 +147,7 @@ function applyHH(pValues){
 	var acceptanceRate = pValues[7];
 	var maxIteration = pValues[8];
 	var maxTrials = pValues[9];
-
+	var iterationDisplayed = pValues[10];
 	//convert coordinatesOfCities into an array of array of numbers
 	for(var i = 0; i < coordinatesOfCities.length/2; i++){
 		data.push([coordinatesOfCities[2*i], coordinatesOfCities[2*i+1]]);
@@ -251,8 +251,8 @@ function applyHH(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness.slice(0, 1000), chart: 1});
-	chartData.push({name: "bestSolutions", type: "process", data: bestFitness.slice(0, 1000), chart: 1});
+	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness.slice(0, iterationDisplayed), chart: 1});
+	chartData.push({name: "bestSolutions", type: "process", data: bestFitness.slice(0, iterationDisplayed), chart: 1});
 
 	return chartData;
 }
