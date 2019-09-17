@@ -1,3 +1,5 @@
+// author: Xingjian Lu (Andy) 2019 psyxl11
+
 var heuristicPage = new heuristic(
 	"Memetic Algorithms",
 	"Memetic Algorithms",

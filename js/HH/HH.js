@@ -1,3 +1,5 @@
+// author: Xingjian Lu (Andy) 2019 psyxl11
+
 //Hyper-heuristics
 var distanceMatrix;		//distances between all pairs of cities, distanceMatrix[a][b] stands for the distance between city of index a and b in data
 var data;							//array of array of numbers, represent the coordinates of cities
@@ -249,8 +251,8 @@ function applyHH(pValues){
 
 	var chartData = [];
 	chartData.push({name: "bestSolution: " + allBestDistance, type: "route", data: bestSolutionOb, chart: 0, route: allBestSolution});
-	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness, chart: 1});
-	chartData.push({name: "bestSolutions", type: "process", data: bestFitness, chart: 1});
+	chartData.push({name: "currentSolutions", type: "process", data: acceptedFitness.slice(0, 1000), chart: 1});
+	chartData.push({name: "bestSolutions", type: "process", data: bestFitness.slice(0, 1000), chart: 1});
 
 	return chartData;
 }

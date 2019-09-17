@@ -1,3 +1,5 @@
+// author: Xingjian Lu (Andy) 2019 psyxl11
+
 //parameters - start
 var hTitle;					//title of the page
 var hName;					//name of the page
@@ -455,7 +457,8 @@ function addData(data, label, id, route){
 		data:	data,
 		borderColor: color[Math.floor(Math.random() * Math.floor(color.length))],
 		lineTension: 0,
-		pointRadius: radius
+		pointRadius: radius,
+		fill: false
 	});
 }
 //functions - end

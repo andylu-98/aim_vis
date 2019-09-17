@@ -1,6 +1,8 @@
 # Heuristics.js for G52AIM
 a visualization tool for major heuristics covered in G52AIM module
 
+author: Xingjian Lu (Andy) 2019 psyxl11
+
 ---
 ## Heuristics.js
 Heuristics.js contains two files, heuristics.js & heuristics.css.
