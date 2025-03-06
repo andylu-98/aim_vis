@@ -1,7 +1,7 @@
 # Heuristics.js for G52AIM
 a visualization tool for major heuristics covered in G52AIM module
 
-andylu-98.github.io/aim_vis/
+[andylu-98.github.io/aim_vis/](andylu-98.github.io/aim_vis/)
 
 author: Xingjian Lu (Andy) 2019 psyxl11
 
